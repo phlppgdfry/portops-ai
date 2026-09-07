@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PortOps.Api/PortOps.Api.csproj" />
+    <Project Path="src/PortOps.Domain/PortOps.Domain.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PortOps.Tests/PortOps.Tests.csproj" />
+  </Folder>
+</Solution>
