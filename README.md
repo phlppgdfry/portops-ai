@@ -85,6 +85,9 @@ Items not marked implemented are planned capabilities. Provider SDKs and deploym
 
 ## Documentation
 
+- [Original product vision and workflow](docs/product-vision.md)
+- [Current progress and resume point](docs/progress.md)
+
 - [Domain research and evidence boundaries](docs/domain-research.md)
 - [Implementation brief and acceptance criteria](docs/implementation-brief.md)
 - [API and demo policy](docs/api-and-rules.md)
