@@ -8,31 +8,37 @@ using Microsoft.Extensions.Options;
 namespace PortOps.Api;
 
 /// <summary>Local demo identity only. Replace with OIDC before external deployment.</summary>
+public sealed record DemoIdentity(string Customer, string ActorId, string Role);
+
 public sealed class DemoCredentials
 {
-    private readonly IReadOnlyList<(string Customer, byte[] Hash)> entries;
+    private readonly IReadOnlyList<(DemoIdentity Identity, byte[] Hash)> entries;
 
     public DemoCredentials(IConfiguration configuration, IHostEnvironment environment)
     {
         if (!environment.IsDevelopment() && !environment.IsEnvironment("Testing"))
             throw new InvalidOperationException("Demo identity is available only in Development or Testing.");
         var configured = new[] { "northstar", "harborline" }
-            .Select(customer => (Customer: customer, Token: configuration[$"DemoAuth:Keys:{customer}"]))
+            .SelectMany(customer => new[]
+            {
+                (Identity: new DemoIdentity(customer, $"demo:{customer}:operator", "Operator"), Token: configuration[$"DemoAuth:Keys:{customer}"]),
+                (Identity: new DemoIdentity(customer, $"demo:{customer}:reviewer", "Reviewer"), Token: configuration[$"DemoAuth:ReviewerKeys:{customer}"])
+            })
             .Where(x => !string.IsNullOrWhiteSpace(x.Token)).ToArray();
         if (configured.Length == 0 || configured.Any(x => x.Token!.Length < 24 || x.Token.Length > 1024 || x.Token.Any(char.IsWhiteSpace)))
             throw new InvalidOperationException("Set DemoAuth__Keys__northstar and/or DemoAuth__Keys__harborline to distinct demo tokens of 24–1024 characters without whitespace.");
         if (configured.Select(x => x.Token).Distinct(StringComparer.Ordinal).Count() != configured.Length)
-            throw new InvalidOperationException("Each demo customer must have a distinct token.");
-        entries = configured.Select(x => (x.Customer, Hash(x.Token!))).ToArray();
+            throw new InvalidOperationException("Each demo identity must have a distinct token.");
+        entries = configured.Select(x => (x.Identity, Hash(x.Token!))).ToArray();
     }
 
-    public string? Resolve(string token)
+    public DemoIdentity? Resolve(string token)
     {
         if (token.Length is < 24 or > 1024) return null;
         var hash = Hash(token);
-        string? customer = null;
+        DemoIdentity? customer = null;
         foreach (var entry in entries)
-            if (CryptographicOperations.FixedTimeEquals(hash, entry.Hash)) customer = entry.Customer;
+            if (CryptographicOperations.FixedTimeEquals(hash, entry.Hash)) customer = entry.Identity;
         return customer;
     }
 
@@ -54,7 +60,8 @@ public sealed class DemoAuthentication(IOptionsMonitor<AuthenticationSchemeOptio
         var customer = credentials.Resolve(header[7..]);
         if (customer is null) return Task.FromResult(AuthenticateResult.Fail("Invalid demo credentials."));
         var identity = new ClaimsIdentity([
-            new Claim(ClaimTypes.NameIdentifier, $"demo:{customer}"), new Claim("customer_id", customer)
+            new Claim(ClaimTypes.NameIdentifier, customer.ActorId), new Claim("customer_id", customer.Customer),
+            new Claim(ClaimTypes.Role, customer.Role)
         ], SchemeName);
         return Task.FromResult(AuthenticateResult.Success(
             new AuthenticationTicket(new ClaimsPrincipal(identity), SchemeName)));

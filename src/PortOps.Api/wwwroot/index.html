@@ -12,11 +12,11 @@
   <header class="masthead">
     <a class="brand" href="/" aria-label="PortOps AI start"><span class="mark" aria-hidden="true">P<span>↗</span></span><span>PortOps <b>AI</b></span></a>
     <span class="product-label">LOGISTICS OPERATIONS AGENT</span>
-    <div class="account"><span id="customer-label">Onafhankelijke portfolio-demo</span><button id="logout" class="quiet" hidden>Afmelden</button></div>
+    <div class="account"><span id="role-label"></span><span id="customer-label">Onafhankelijke portfolio-demo</span><button id="logout" class="quiet" hidden>Afmelden</button></div>
   </header>
   <main>
     <section id="login" class="login-panel">
-      <div><p class="eyebrow">TERMINAL OPERATIONS / DEMO</p><h1>Van een status<br>naar een antwoord.</h1><p class="intro">Onderzoek welke voertuigen aandacht vragen, bekijk wat ze blokkeert en laat de agent de bronnen samenbrengen.</p><div class="demo-note"><span class="dot"></span> Fictieve terminaldata · Alleen lezen</div></div>
+      <div><p class="eyebrow">TERMINAL OPERATIONS / DEMO</p><h1>Van een status<br>naar een antwoord.</h1><p class="intro">Onderzoek welke voertuigen aandacht vragen, bekijk wat ze blokkeert en laat de agent de bronnen samenbrengen.</p><div class="demo-note"><span class="dot"></span> Fictieve terminaldata · Acties na controle</div></div>
       <form id="login-form" class="access-card">
         <span class="step">01 / TOEGANG</span><h2>Open je werkruimte</h2><p>Gebruik de lokale demotoegangscode voor jouw klant.</p>
         <label for="access-token">Demotoegangscode</label><input id="access-token" type="password" required autocomplete="off" spellcheck="false" placeholder="Voer je toegangscode in">
@@ -39,10 +39,16 @@
           <p id="model-note" class="model-note"></p>
           <div id="chat" class="chat" role="log" aria-live="polite" aria-relevant="additions"><div class="welcome"><span class="agent-monogram" aria-hidden="true">P↗</span><h3>Waar wil je op inzoomen?</h3><p>Stel een vraag over de voertuigen, blokkades of scheepsinformatie binnen jouw klantomgeving.</p></div></div>
           <div class="suggestions"><button data-question="Welke voertuigen vragen vandaag aandacht en waarom?">Wat heeft prioriteit?</button><button data-question="Waarom is DEMO-003 niet klaar voor afhaling?">Waarom is DEMO-003 niet RFP?</button></div>
-          <form id="question-form" class="composer"><label class="sr-only" for="question">Vraag aan PortOps</label><textarea id="question" rows="2" maxlength="2000" placeholder="Stel een operationele vraag…" required></textarea><div><span>Alleen lezen · Antwoorden met bronnen</span><button id="send" type="submit" class="primary">Onderzoeken ↗</button></div></form>
+          <form id="question-form" class="composer"><label class="sr-only" for="question">Vraag aan PortOps</label><textarea id="question" rows="2" maxlength="2000" placeholder="Stel een operationele vraag…" required></textarea><div><span>Bronnen bekijken · Concepten controleren</span><button id="send" type="submit" class="primary">Onderzoeken ↗</button></div></form>
           <button id="cancel" class="quiet cancel" hidden>Onderzoek stoppen</button>
         </section>
       </div>
+      <section class="panel proposal-panel" aria-labelledby="proposals-heading">
+        <div class="panel-header"><div><p class="eyebrow">03 / MENSELIJKE CONTROLE</p><h2 id="proposals-heading">Actievoorstellen</h2></div><button id="refresh-proposals" class="quiet">Vernieuwen ↻</button></div>
+        <p id="review-note" class="model-note">Concepten zijn nog niet verzonden. Een beoordelaar controleert de inhoud en keurt de simulatie goed.</p>
+        <p id="proposal-error" class="error inset" role="alert"></p>
+        <div id="proposal-list" class="proposal-list"><p class="muted">Er zijn nog geen voorstellen. Kies een voertuig en maak een conceptbericht.</p></div>
+      </section>
     </section>
   </main>
   <footer><span>PORTOPS AI</span><span>Fictieve gegevens. Geen koppeling met een echte terminal.</span></footer>

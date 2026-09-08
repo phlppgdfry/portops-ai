@@ -2,7 +2,7 @@
 
 An independent portfolio project for investigating RoRo terminal operations, explaining vehicle and booking exceptions with evidence, and proposing actions for human approval.
 
-**Status: .NET 10 operational API, read-only tool-calling agent and Dutch operations interface implemented. Automated tests use scripted models; a real-model smoke test is pending provider configuration. Real TOS integration, persistence, approvals and deployment remain planned.**
+**Status: .NET 10 operational API, tool-calling agent, versioned procedure retrieval, durable reviewable drafts and Dutch operations interface implemented. Automated tests use scripted models; a real-model smoke test is pending provider configuration. Human approval and simulated delivery work locally; real TOS integration, production identity, database storage and cloud deployment remain planned.**
 
 ## Run locally
 
@@ -11,6 +11,7 @@ Requires the .NET SDK specified in `global.json`. No database, model account or 
 ```bash
 dotnet test PortOps.slnx
 export DemoAuth__Keys__northstar="$(openssl rand -hex 24)"
+export DemoAuth__ReviewerKeys__northstar="$(openssl rand -hex 24)"
 dotnet run --project src/PortOps.Api --launch-profile demo
 ```
 
@@ -29,7 +30,7 @@ All timestamps are evaluated against a **fixed scenario clock: 2026-09-07 08:00 
 
 ## Model connection
 
-See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configuration, limits and the remaining real-model checks. The interface works without a model; chat stays disabled until configured.
+See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configuration, limits and the remaining real-model checks. The interface, procedure lookup, draft preparation and human approval work without a model; chat stays disabled until configured.
 
 ## What works now
 
@@ -38,7 +39,9 @@ See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configura
 - An attention overview with deterministic urgency categories; no invented delay probabilities.
 - Customer-scoped vehicle, booking and vessel-call endpoints.
 - Authenticated HTTP integration tests alongside domain acceptance tests.
-- Three customer-scoped agent tools, bounded model loop and retrieved-source validation.
+- Five scoped agent tools: attention, vehicle, vessel call, procedure search and notification draft.
+- Bounded model loop and retrieved-source validation.
+- Separate reviewer identity, exact-version approval and durable simulated delivery with audit records.
 - Dutch operations desk with vehicle investigation, source details and cancellable chat.
 
 Northstar's default overview contains five attention items:
@@ -61,7 +64,7 @@ PortOps combines operational records, vessel-call information and relevant proce
 
 Customer-service and planning workflows are applications of the same operations agent. They do not replace its broader purpose.
 
-## Target agent demonstration (next milestones)
+## Target demonstration
 
 1. A dispatcher asks which bookings need attention within the next 24 hours.
 2. The agent queries tenant-scoped vehicle, booking and vessel-call tools.
@@ -76,15 +79,17 @@ Customer-service and planning workflows are applications of the same operations 
 - ASP.NET Core API and explicit domain rules (implemented).
 - One tool-calling agent; model provider behind an interface (implemented; live-model evaluation pending).
 - Synthetic in-memory TOS data first (implemented); no assumed access to commercial systems.
-- PostgreSQL persistence, grounded document retrieval, role and customer authorization.
-- Persisted approval workflow, idempotent action execution and audit records.
-- OpenTelemetry traces and repeatable agent evaluations.
+- Local atomic JSON proposal storage, lexical procedure retrieval and demo reviewer/customer authorization (implemented).
+- PostgreSQL, richer retrieval and production identity (planned).
+- Persisted approval workflow, idempotent simulated execution and audit records (implemented; no external delivery).
+- ActivitySource instrumentation and a nine-case live-model evaluation runner (implemented; real-model results and telemetry export pending).
 - MCP and Azure deployment after the first complete workflow is verified.
 
-Items not marked implemented are planned capabilities. Provider SDKs and deployment details must be verified against official documentation during implementation.
+See the progress document for the current milestone and its validation limits. Provider SDKs and deployment details must be verified against official documentation during implementation.
 
 ## Documentation
 
+- [Five-minute demo and review flow](docs/demo-walkthrough.md)
 - [Original product vision and workflow](docs/product-vision.md)
 - [Current progress and resume point](docs/progress.md)
 

@@ -21,7 +21,7 @@ public sealed record Finding(string Text, IReadOnlyList<string> EvidenceIds);
 public sealed record ModelAnswer(string Status, IReadOnlyList<Finding> Findings, IReadOnlyList<string> Unknowns);
 public sealed record ToolCall(string Id, string Name, string Arguments);
 public sealed record ToolExecution(string Name, string Status, long DurationMs);
-public sealed record ToolResult(string Status, JsonElement Data, IReadOnlyList<Evidence> Evidence);
+public sealed record ToolResult(string Status, JsonElement Data, IReadOnlyList<Evidence> Evidence, ActionProposal? Proposal = null);
 public sealed record TokenUsage(int InputTokens, int OutputTokens);
 public sealed record ModelTurn(IReadOnlyList<JsonElement> OutputItems, IReadOnlyList<ToolCall> Calls,
     string? FinalText, TokenUsage? Usage, bool Refused = false);
@@ -29,7 +29,7 @@ public sealed record ModelInput(string Instructions, IReadOnlyList<JsonElement> 
 public sealed record AgentResult(string Status, IReadOnlyList<Finding> Findings,
     IReadOnlyList<string> Unknowns, IReadOnlyList<Evidence> Evidence,
     IReadOnlyList<ToolExecution> Tools, string TraceId, long DurationMs, TokenUsage? Usage,
-    DateTimeOffset EvaluatedAt, string Provider, string Model);
+    DateTimeOffset EvaluatedAt, string Provider, string Model, IReadOnlyList<ActionProposal>? Proposals = null);
 
 public interface IAgentModel
 {

@@ -26,7 +26,7 @@ public sealed class ResponsesModelTests
             using var body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync());
             Assert.False(body.RootElement.GetProperty("store").GetBoolean());
             Assert.Equal("required", body.RootElement.GetProperty("tool_choice").GetString());
-            Assert.Equal(3, body.RootElement.GetProperty("tools").GetArrayLength());
+            Assert.Equal(5, body.RootElement.GetProperty("tools").GetArrayLength());
             Assert.True(body.RootElement.GetProperty("text").GetProperty("format").GetProperty("strict").GetBoolean());
             Assert.Contains("reasoning.encrypted_content", body.RootElement.GetProperty("include").EnumerateArray().Select(x => x.GetString()));
             return new(HttpStatusCode.OK) { Content = new StringContent("""
@@ -40,6 +40,7 @@ public sealed class ResponsesModelTests
 
     [Theory]
     [InlineData("{\"status\":\"incomplete\",\"output\":[]}", "provider_incomplete")]
+    [InlineData("{\"status\":\"completed\",\"output\":[{\"type\":\"function_call\",\"call_id\":\"c1\",\"name\":\"get_vehicle\",\"arguments\":null}]}", "provider_protocol")]
     [InlineData("not json", "provider_protocol")]
     [InlineData("{\"status\":\"completed\"}", "provider_protocol")]
     public async Task Malformed_or_incomplete_responses_are_not_accepted(string body, string code)

@@ -30,7 +30,7 @@ History contains at most six objects with `question` and `answer` strings, each 
 
 Default limits: 60 seconds, six model turns, eight tool calls, 2,500 output tokens per model call, one concurrent investigation per customer and ten requests per minute per customer. Request bodies are limited to 64 KiB. Cancellation stops the request; partial answers are not accepted.
 
-Errors: 400 invalid input, 401 invalid demo token, 429 busy/rate limited, 503 missing model configuration, 504 timeout and 502 provider/protocol/source-validation failure. There are no action or approval tools.
+Errors: 400 invalid input, 401 invalid demo token, 429 busy/rate limited, 503 missing model configuration, 504 timeout and 502 provider/protocol/source-validation failure. The agent can create a draft through `propose_notification`; it has no approval or delivery tool. Human-only authenticated endpoints perform review and simulated execution.
 
 ## Validation and remaining work
 
@@ -38,4 +38,8 @@ Run `dotnet test PortOps.slnx`. Domain, API, tool, runner and HTTP adapter tests
 
 After configuring a real model, verify attention overview, DEMO-003 damage hold, DEMO-004 discharge versus pickup release, DEMO-005 conflicting observations and inaccessible DEMO-007. Review every finding against its cited records. Record provider, deployment/model version, run date, prompts, outcomes and failures; do not publish a quality score before evaluation.
 
-Citation validation checks that references were retrieved, not that every sentence follows from those references. Procedure retrieval, approvals, persistence, telemetry export and a repeatable real-model evaluation runner remain future milestones.
+Citation validation checks that references were retrieved, not that every sentence follows from those references. Versioned lexical procedure retrieval, local durable approvals and an evaluation runner are implemented. Telemetry export, production database/identity and live-model validation remain outstanding.
+
+## Live evaluation runner
+
+With a configured local model, set `PORTOPS_TOKEN` to an operator demo token and run `python3 scripts/evaluate-agent.py --base-url http://localhost:5089`. The nine-case dataset is `evals/scenarios.json`; output is saved under ignored `artifacts/evals/`. One case intentionally creates a draft, but the runner never approves anything. Automated checks cover tool use, expected citations, restricted content and the execution boundary. Every result still requires the dataset’s manual factual review. An unconfigured model produces a blocked report and exit code 2, never a fabricated score.

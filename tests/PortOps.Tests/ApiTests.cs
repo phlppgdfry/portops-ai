@@ -10,6 +10,8 @@ namespace PortOps.Tests;
 public sealed class DemoFactory : WebApplicationFactory<Program>
 {
     public const string Northstar = "test-only-northstar-token-00000001";
+    public const string Reviewer = "test-only-northstar-reviewer-00003";
+    private readonly string storePath = Path.Combine(Path.GetTempPath(), "portops-api-tests", Guid.NewGuid().ToString("N"), "proposals.json");
     public const string Harborline = "test-only-harborline-token-00000002";
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -17,7 +19,9 @@ public sealed class DemoFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((_, configuration) => configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["DemoAuth:Keys:northstar"] = Northstar,
-            ["DemoAuth:Keys:harborline"] = Harborline
+            ["DemoAuth:Keys:harborline"] = Harborline,
+            ["DemoAuth:ReviewerKeys:northstar"] = Reviewer,
+            ["Proposals:Path"] = storePath
         }));
     }
 }

@@ -13,7 +13,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddProblemDetails();
 builder.Services.AddAuthentication(DemoAuthentication.SchemeName)
     .AddScheme<AuthenticationSchemeOptions, DemoAuthentication>(DemoAuthentication.SchemeName, _ => { });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options => options.AddPolicy("Reviewer", policy => policy.RequireRole("Reviewer")));
 builder.Services.AddSingleton<DemoCredentials>();
 var snapshot = DemoTerminal.Create();
 builder.Services.AddSingleton(snapshot);
@@ -29,6 +29,16 @@ builder.Services.AddSingleton(serviceProvider =>
 });
 builder.Services.AddHttpClient<IAgentModel, ResponsesModel>(client => client.Timeout = Timeout.InfiniteTimeSpan)
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
+builder.Services.AddSingleton<ProcedureCatalog>();
+builder.Services.AddSingleton(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
+    return new ProposalStore(configuration["Proposals:Path"] ?? Path.Combine(environment.ContentRootPath, "App_Data", "proposals.json"));
+});
+builder.Services.AddSingleton(serviceProvider => new ProposalService(
+    serviceProvider.GetRequiredService<OperationsService>(), serviceProvider.GetRequiredService<ProcedureCatalog>(),
+    serviceProvider.GetRequiredService<ProposalStore>(), TimeProvider.System));
 builder.Services.AddSingleton<OperationalTools>();
 builder.Services.AddSingleton<AgentRunner>();
 builder.Services.AddRateLimiter(options =>
@@ -45,6 +55,7 @@ var app = builder.Build();
 // Validate credentials before accepting traffic. No default credentials.
 _ = app.Services.GetRequiredService<DemoCredentials>();
 _ = app.Services.GetRequiredService<AgentOptions>();
+_ = app.Services.GetRequiredService<ProposalStore>();
 app.UseExceptionHandler();
 app.Use(async (context, next) =>
 {
@@ -72,6 +83,7 @@ api.MapGet("/demo", (OperationsService operations, ClaimsPrincipal user) => Resu
     name = "PortOps AI — Logistics Operations Agent",
     mode = "synthetic-demo",
     customerId = Customer(user),
+    canApprove = user.IsInRole("Reviewer"),
     scenarioTime = operations.ScenarioTime,
     evaluatedAt = operations.Now,
     displayTimeZone = "Europe/Brussels",
@@ -97,7 +109,7 @@ api.MapGet("/agent/status", (AgentOptions settings) => Results.Ok(new
 {
     configured = settings.IsConfigured, provider = settings.Provider,
     model = settings.IsConfigured ? settings.Model : null,
-    mode = "read-only", maxModelTurns = settings.MaxModelTurns,
+    mode = "investigate-and-draft; human approval required", maxModelTurns = settings.MaxModelTurns,
     maxToolCalls = settings.MaxToolCalls, timeoutSeconds = settings.TimeoutSeconds,
     citationValidation = "retrieved-record-membership; factual support requires evaluation"
 }));
@@ -119,6 +131,8 @@ api.MapPost("/agent/investigate", async (AgentRequest request, AgentRunner agent
             extensions: new Dictionary<string, object?> { ["code"] = failure.Code, ["traceId"] = context.TraceIdentifier });
     }
 }).RequireRateLimiting("agent");
+
+ProposalEndpoints.Map(api);
 
 app.Run();
 

@@ -2,6 +2,7 @@
 
 const $ = selector => document.querySelector(selector);
 let token = '', epoch = 0, vehicles = [], overview = null, selected = null;
+let canApprove = false, proposalRows = [], proposalBusy = false, proposalFetch = 0;
 let history = [], modelReady = false, busy = false, requestController = null;
 const date = value => value ? new Intl.DateTimeFormat('nl-BE', {
   timeZone: 'Europe/Brussels', dateStyle: 'medium', timeStyle: 'short'
@@ -23,6 +24,8 @@ async function api(path, options = {}) {
     const problem = await response.json().catch(() => ({}));
     const messages = {
       401: 'Deze toegangscode is niet geldig. Meld je opnieuw aan.',
+      403: 'Voor deze actie is een beoordelaarscode nodig.',
+      409: 'Dit voorstel is verlopen, gewijzigd of al afgehandeld. Vernieuw het overzicht en controleer opnieuw.',
       429: 'Er loopt al een onderzoek of je hebt te snel opnieuw gevraagd. Probeer het straks nog eens.',
       503: 'De modelverbinding is nog niet ingesteld. Je kunt de terminalgegevens wel bekijken.',
       504: 'Het onderzoek duurde te lang. Er wordt geen gedeeltelijk antwoord getoond.'
@@ -42,11 +45,17 @@ async function loadWorkspace() {
   const currentEpoch = epoch;
   $('#refresh').disabled = true;
   try {
-    const [metadata, attention, rows, status] = await Promise.all([
-      api('/api/demo'), api('/api/operations/attention'), api('/api/vehicles'), api('/api/agent/status')
+    const [metadata, attention, rows, status, proposals] = await Promise.all([
+      api('/api/demo'), api('/api/operations/attention'), api('/api/vehicles'), api('/api/agent/status'), api('/api/proposals')
     ]);
     if (currentEpoch !== epoch) return;
     overview = attention; vehicles = rows; modelReady = status.configured;
+    canApprove = metadata.canApprove; proposalRows = proposals;
+    $('#role-label').textContent = canApprove ? 'Beoordelaar' : 'Operator';
+    $('#review-note').textContent = canApprove
+      ? 'Controleer de volledige inhoud en bronnen. Goedkeuring registreert alleen een simulatie; er gaat geen e-mail uit.'
+      : 'Je kunt concepten voorbereiden. Meld je met een aparte beoordelaarscode aan om ze goed te keuren of af te wijzen.';
+    renderProposals();
     $('#customer-label').textContent = metadata.customerId === 'northstar' ? 'Northstar Motors' : 'Harborline Motors';
     $('#scenario-time').textContent = date(metadata.scenarioTime);
     $('#scenario-time').dateTime = metadata.scenarioTime;
@@ -117,7 +126,25 @@ function selectVehicle(id) {
   for (const warning of new Set([...result.pickup.warnings, ...result.loading.warnings])) detail.append(el('p', 'warning', warning));
   const sources = [...new Map([...result.pickup.evidence, ...result.loading.evidence,
     ...result.vehicle.events.map(event => event.evidence)].map(source => [source.id, source])).values()];
-  detail.append(sourceList(sources)); updateControls();
+  detail.append(sourceList(sources));
+  const draft = el('button', 'quiet draft-button', 'Conceptbericht voorbereiden');
+  draft.type = 'button'; draft.disabled = proposalBusy;
+  draft.addEventListener('click', () => proposalAction('/api/proposals', { vehicleId: id }));
+  detail.append(draft);
+  const procedureBox = el('div', 'procedure-box'); procedureBox.append(el('p', 'muted', 'Werkinstructies ophalen…'));
+  detail.append(procedureBox);
+  const selectionEpoch = epoch;
+  api(`/api/vehicles/${encodeURIComponent(id)}/procedures`).then(procedures => {
+    if (selectionEpoch !== epoch || selected !== id) return;
+    procedureBox.replaceChildren();
+    const details = el('details'); details.append(el('summary', '', `Fictieve werkinstructies (${procedures.length})`));
+    for (const procedure of procedures) {
+      const block = el('div', 'source'); block.append(el('strong', '', `${procedure.title} · v${procedure.version}`), el('p', '', procedure.text));
+      block.append(el('small', 'muted', `${procedure.evidence.id} · ${date(procedure.evidence.observedAt)}`)); details.append(block);
+    }
+    procedureBox.append(details);
+  }).catch(error => { if (selectionEpoch === epoch && selected === id) procedureBox.replaceChildren(el('p', 'error', error.message)); });
+  updateControls();
 }
 function setQuestion(question) {
   $('#question').value = question;
@@ -126,7 +153,7 @@ function setQuestion(question) {
 }
 function renderAnswer(result) {
   const box = el('div', 'message assistant'); box.append(el('span', 'speaker', 'PORTOPS AI'));
-  if (result.status === 'refused') box.append(el('p', '', 'Deze agent kan alleen operationele gegevens onderzoeken. Hij voert geen wijzigingen of verzendingen uit.'));
+  if (result.status === 'refused') box.append(el('p', '', 'Deze agent kan alleen operationele gegevens onderzoeken. Hij kan concepten voorbereiden; goedkeuren en verzenden zijn geen agenttools.'));
   else if (result.status === 'insufficient_evidence' && result.findings.length === 0)
     box.append(el('p', '', 'Er zijn onvoldoende toegankelijke gegevens om deze vraag te beantwoorden.'));
   for (const finding of result.findings) {
@@ -154,6 +181,7 @@ $('#login-form').addEventListener('submit', async event => {
 $('#refresh').addEventListener('click', () => loadWorkspace().catch(error => $('#data-error').textContent = error.message));
 $('#logout').addEventListener('click', () => {
   epoch++; requestController?.abort(); token = ''; history = []; vehicles = []; overview = null; selected = null;
+  proposalRows = []; canApprove = false; proposalBusy = false; $('#proposal-list').replaceChildren(); $('#proposal-error').textContent = ''; $('#role-label').textContent = '';
   modelReady = false; busy = false; $('#workspace').hidden = true; $('#login').hidden = false; $('#logout').hidden = true;
   $('#chat').replaceChildren(); $('#vehicle-list').replaceChildren(); $('#vehicle-detail').replaceChildren();
   $('#question').value = ''; $('#access-token').value = ''; $('#customer-label').textContent = 'Onafhankelijke portfolio-demo'; updateControls();
@@ -171,10 +199,82 @@ $('#question-form').addEventListener('submit', async event => {
     const result = await api('/api/agent/investigate', { method: 'POST', body: JSON.stringify({ message: question, history }), signal: requestController.signal });
     if (epoch !== currentEpoch) return;
     pending.replaceWith(renderAnswer(result));
+    await loadProposals();
+    if (epoch !== currentEpoch) return;
     history.push({ question, answer: result.findings.map(x => x.text).join('\n').slice(0, 4000) }); history = history.slice(-6);
   } catch (error) {
-    if (epoch === currentEpoch) pending.replaceWith(el('p', 'error', error.name === 'AbortError' ? 'Onderzoek gestopt.' : error.message));
+    if (epoch === currentEpoch) {
+      pending.replaceWith(el('p', 'error', error.name === 'AbortError' ? 'Onderzoek gestopt. Controleer Actievoorstellen op reeds gemaakte concepten.' : error.message));
+      await loadProposals();
+    }
   } finally {
     if (epoch === currentEpoch) { busy = false; requestController = null; updateControls(); chat.scrollTop = chat.scrollHeight; }
   }
 });
+
+const proposalStates = { draft: 'Te controleren', expired: 'Verlopen', executed: 'Simulatie vastgelegd', rejected: 'Afgewezen' };
+async function loadProposals() {
+  const currentEpoch = epoch, fetchId = ++proposalFetch;
+  try {
+    const rows = await api('/api/proposals');
+    if (currentEpoch !== epoch) return;
+    if (fetchId !== proposalFetch) return;
+    proposalRows = rows; renderProposals();
+  } catch (error) { if (currentEpoch === epoch) $('#proposal-error').textContent = error.message; }
+}
+function renderProposals() {
+  const list = $('#proposal-list'); list.replaceChildren();
+  if (!proposalRows.length) list.append(el('p', 'muted', 'Er zijn nog geen voorstellen. Kies een voertuig en maak een conceptbericht.'));
+  for (const proposal of proposalRows) {
+    const card = el('article', 'proposal-card');
+    const heading = el('div', 'detail-top'); heading.append(el('h3', '', `${proposal.vehicleId} · versie ${proposal.version}`), el('span', 'badge', proposalStates[proposal.status] || proposal.status));
+    card.append(heading, el('p', 'muted', `Simulatieadres: ${proposal.destination}`), el('strong', '', proposal.subject));
+    const content = el('details', 'proposal-content'); content.append(el('summary', '', 'Volledig concept en bronnen controleren'), el('pre', 'proposal-body', proposal.body), sourceList(proposal.evidence));
+    card.append(content);
+    card.append(el('p', 'muted', `Aangemaakt: ${date(proposal.createdAt)} · Geldig tot: ${date(proposal.expiresAt)} (werkelijke tijd)`));
+    const audit = el('details'); audit.append(el('summary', '', `Auditlog (${proposal.audit.length})`));
+    const eventLabels = { created: 'Concept aangemaakt', refreshed: 'Nieuwe versie aangemaakt', approved: 'Goedgekeurd', rejected: 'Afgewezen', simulated_delivery: 'Verzending gesimuleerd' };
+    for (const entry of proposal.audit) audit.append(el('p', 'muted', `${eventLabels[entry.event] || entry.event} · ${entry.actorId} · v${entry.version} · ${date(entry.at)}`));
+    card.append(audit);
+    if (proposal.delivery) card.append(el('p', 'delivery-receipt', `Simulatiebewijs: ${proposal.delivery.id}. Geen e-mail verzonden.`));
+    if (proposal.status === 'draft' || proposal.status === 'expired') {
+      const controls = el('div', 'proposal-controls');
+      const refresh = el('button', 'quiet', 'Actualiseren → nieuwe versie'); refresh.disabled = proposalBusy;
+      refresh.addEventListener('click', () => proposalAction(`/api/proposals/${proposal.id}/refresh`, { version: proposal.version })); controls.append(refresh);
+      if (canApprove && proposal.status === 'draft') {
+        const label = el('label', 'review-check'); const check = el('input'); check.type = 'checkbox'; check.disabled = proposalBusy;
+        label.append(check, el('span', '', `Ik heb de inhoud en bronnen van versie ${proposal.version} gecontroleerd.`));
+        controls.append(label);
+        const approve = el('button', 'primary', 'Goedkeuren en verzending simuleren'); approve.disabled = true;
+        check.addEventListener('change', () => approve.disabled = !check.checked || proposalBusy);
+        approve.addEventListener('click', () => proposalAction(`/api/proposals/${proposal.id}/approve`, { version: proposal.version, payloadHash: proposal.payloadHash }));
+        const reject = el('button', 'quiet', 'Afwijzen'); reject.disabled = proposalBusy;
+        reject.addEventListener('click', () => proposalAction(`/api/proposals/${proposal.id}/reject`, { version: proposal.version, payloadHash: proposal.payloadHash }));
+        controls.append(approve, reject);
+      }
+      card.append(controls);
+    }
+    list.append(card);
+  }
+}
+async function proposalAction(path, payload) {
+  if (proposalBusy) return;
+  const currentEpoch = epoch;
+  proposalBusy = true; $('#proposal-error').textContent = ''; renderProposals();
+  document.querySelectorAll('.draft-button').forEach(button => button.disabled = true);
+  try {
+    await api(path, { method: 'POST', body: JSON.stringify(payload) });
+    if (currentEpoch !== epoch) return;
+    await loadProposals();
+    if (currentEpoch !== epoch) return;
+    $('#proposals-heading').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (error) {
+    if (currentEpoch === epoch) { $('#proposal-error').textContent = error.message; await loadProposals(); }
+  } finally {
+    if (currentEpoch === epoch) {
+      proposalBusy = false; renderProposals();
+      document.querySelectorAll('.draft-button').forEach(button => button.disabled = false);
+    }
+  }
+}
+$('#refresh-proposals').addEventListener('click', loadProposals);

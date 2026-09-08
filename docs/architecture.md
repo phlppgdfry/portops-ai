@@ -12,7 +12,7 @@ Every observation, hold, booking and vessel call has an evidence record containi
 
 ASP.NET Core validates a configured demo bearer token and sets a customer claim. Endpoints supply that claim to every application read. The caller cannot select scope through a query argument. Vessel-call access requires a booking for that customer, and vehicle lookups return the same 404 for nonexistent and inaccessible IDs.
 
-The local demo credential mechanism is deliberately small and has no default tokens. It is not production identity: OIDC, roles, credential lifecycle and deployment controls remain future work.
+The local demo credential mechanism is deliberately small and has no default tokens. It is not production identity: A separate demo reviewer role is implemented; OIDC, production role management, credential lifecycle and deployment controls remain future work.
 
 ## Use repeatable scenarios
 
@@ -24,8 +24,12 @@ This milestone implements the domain directly without copying shipment-tracking-
 
 ## Next boundary
 
-Connect one real model to scoped read tools, preserve tool evidence IDs and add agent evaluation cases. Add procedure retrieval and reviewable proposals after that loop works. Do not represent a hardcoded responder or mock model as a functioning AI agent.
+Configure and evaluate a real model using the prepared dataset. Do not represent scripted model responses or deterministic draft templates as demonstrated live-model performance.
 
 ## Read-only agent boundary
 
-`PortOps.Agent` wraps scoped domain reads through three strict tools. The Responses adapter replays all output items, including reasoning, with storage disabled. Client history remains untrusted user text. Findings must cite retrieved evidence IDs; membership validation does not prove factual entailment. One investigation per customer, bounded turns/tool calls, provider timeouts and response-size limits constrain execution. ActivitySource spans contain timing/status/usage metadata; no exporter is configured yet. See [setup and validation](agent-setup.md).
+`PortOps.Agent` wraps scoped domain reads through five strict tools. The Responses adapter replays all output items, including reasoning, with storage disabled. Client history remains untrusted user text. Findings must cite retrieved evidence IDs; membership validation does not prove factual entailment. One investigation per customer, bounded turns/tool calls, provider timeouts and response-size limits constrain execution. ActivitySource spans contain timing/status/usage metadata; no exporter is configured yet. See [setup and validation](agent-setup.md).
+
+## Durable human review
+
+The model can retrieve original versioned fictional procedures through a lexical search tool and create deterministic notification drafts. It cannot approve or execute. Separate reviewer claims authorize the decision endpoints. Proposal version, exact payload hash, current-record fingerprint and wall-clock expiry are checked before simulated delivery. A local single-owner JSON store atomically persists approval and receipt together; this prevents duplicate simulated actions across concurrent requests and restarts. Real delivery will need a transactional outbox and an idempotent external adapter when introduced. PostgreSQL remains a future production persistence choice.

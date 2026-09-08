@@ -63,8 +63,15 @@ public sealed class ResponsesModel(HttpClient client, AgentOptions options) : IA
             foreach (var output in outputs)
             {
                 var type = output.GetProperty("type").GetString();
-                if (type == "function_call") calls.Add(new(output.GetProperty("call_id").GetString()!,
-                    output.GetProperty("name").GetString()!, output.GetProperty("arguments").GetString()!));
+                if (type == "function_call")
+                {
+                    var callId = output.GetProperty("call_id").GetString();
+                    var name = output.GetProperty("name").GetString();
+                    var arguments = output.GetProperty("arguments").GetString();
+                    if (string.IsNullOrWhiteSpace(callId) || string.IsNullOrWhiteSpace(name) || arguments is null)
+                        throw new AgentFailure("provider_protocol", "The provider returned an invalid function call.");
+                    calls.Add(new(callId, name, arguments));
+                }
                 if (type != "message") continue;
                 foreach (var content in output.GetProperty("content").EnumerateArray())
                 {
