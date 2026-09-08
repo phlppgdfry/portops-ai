@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/PortOps.Agent/PortOps.Agent.csproj" />
     <Project Path="src/PortOps.Api/PortOps.Api.csproj" />
     <Project Path="src/PortOps.Domain/PortOps.Domain.csproj" />
   </Folder>

@@ -2,7 +2,7 @@
 
 An independent portfolio project for investigating RoRo terminal operations, explaining vehicle and booking exceptions with evidence, and proposing actions for human approval.
 
-**Status: working .NET 10 domain/API foundation with synthetic data and 39 passing domain/API tests. The AI agent, real TOS integration, persistence, approvals and deployment are not implemented yet.**
+**Status: .NET 10 operational API, read-only tool-calling agent and Dutch operations interface implemented. Automated tests use scripted models; a real-model smoke test is pending provider configuration. Real TOS integration, persistence, approvals and deployment remain planned.**
 
 ## Run locally
 
@@ -14,7 +14,7 @@ export DemoAuth__Keys__northstar="$(openssl rand -hex 24)"
 dotnet run --project src/PortOps.Api --launch-profile demo
 ```
 
-The API listens on `http://localhost:5088`. Keep the generated token in your local shell; do not commit it. From a second terminal, use the same token in `PORTOPS_TOKEN`:
+Open `http://localhost:5088` for the operations interface and sign in with the generated demo token. The API listens at the same address. Keep the generated token in your local shell; do not commit it. From a second terminal, use the same token in `PORTOPS_TOKEN`:
 
 ```bash
 curl http://localhost:5088/health
@@ -27,6 +27,10 @@ Optional: configure a different `DemoAuth__Keys__harborline` token before starti
 
 All timestamps are evaluated against a **fixed scenario clock: 2026-09-07 08:00 UTC (10:00 Europe/Brussels)**. They are not live terminal statuses.
 
+## Model connection
+
+See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configuration, limits and the remaining real-model checks. The interface works without a model; chat stays disabled until configured.
+
 ## What works now
 
 - Independent pickup and loading readiness, supported by source records and timestamps.
@@ -34,6 +38,8 @@ All timestamps are evaluated against a **fixed scenario clock: 2026-09-07 08:00 
 - An attention overview with deterministic urgency categories; no invented delay probabilities.
 - Customer-scoped vehicle, booking and vessel-call endpoints.
 - Authenticated HTTP integration tests alongside domain acceptance tests.
+- Three customer-scoped agent tools, bounded model loop and retrieved-source validation.
+- Dutch operations desk with vehicle investigation, source details and cancellable chat.
 
 Northstar's default overview contains five attention items:
 
@@ -68,7 +74,7 @@ Customer-service and planning workflows are applications of the same operations 
 ## Planned engineering
 
 - ASP.NET Core API and explicit domain rules (implemented).
-- One tool-calling agent; model provider behind an interface.
+- One tool-calling agent; model provider behind an interface (implemented; live-model evaluation pending).
 - Synthetic in-memory TOS data first (implemented); no assumed access to commercial systems.
 - PostgreSQL persistence, grounded document retrieval, role and customer authorization.
 - Persisted approval workflow, idempotent action execution and audit records.

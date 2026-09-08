@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Onderzoek voertuigstatussen en operationele uitzonderingen met PortOps AI. Onafhankelijke RoRo-demo met fictieve gegevens.">
+  <title>PortOps AI · Operations desk</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="PortOps AI start"><span class="mark" aria-hidden="true">P<span>↗</span></span><span>PortOps <b>AI</b></span></a>
+    <span class="product-label">LOGISTICS OPERATIONS AGENT</span>
+    <div class="account"><span id="customer-label">Onafhankelijke portfolio-demo</span><button id="logout" class="quiet" hidden>Afmelden</button></div>
+  </header>
+  <main>
+    <section id="login" class="login-panel">
+      <div><p class="eyebrow">TERMINAL OPERATIONS / DEMO</p><h1>Van een status<br>naar een antwoord.</h1><p class="intro">Onderzoek welke voertuigen aandacht vragen, bekijk wat ze blokkeert en laat de agent de bronnen samenbrengen.</p><div class="demo-note"><span class="dot"></span> Fictieve terminaldata · Alleen lezen</div></div>
+      <form id="login-form" class="access-card">
+        <span class="step">01 / TOEGANG</span><h2>Open je werkruimte</h2><p>Gebruik de lokale demotoegangscode voor jouw klant.</p>
+        <label for="access-token">Demotoegangscode</label><input id="access-token" type="password" required autocomplete="off" spellcheck="false" placeholder="Voer je toegangscode in">
+        <button class="primary" id="connect" type="submit">Open operations desk <span aria-hidden="true">↗</span></button>
+        <p id="login-error" class="error" role="alert"></p><small>De code blijft alleen in dit tabblad en wordt bij afmelden verwijderd.</small>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <div class="page-title"><div><p class="eyebrow">WERKRUIMTE / OPERATIONS</p><h1>Wat vraagt aandacht?</h1></div><div class="scenario"><span class="dot"></span><div><strong>Fictief scenario</strong><time id="scenario-time"></time></div></div></div>
+      <div class="metrics" aria-label="Operationeel overzicht"><div><span>Voertuigen in scope</span><strong id="total">—</strong></div><div><span>Aandacht nodig</span><strong id="attention-total">—</strong></div><div><span>Deadline verstreken</span><strong id="critical-total">—</strong></div><div class="metric-note"><span>Bronnen vóór conclusies.</span><p>Status, onzekerheid en herkomst blijven zichtbaar.</p></div></div>
+      <div class="desk">
+        <section class="panel operations" aria-labelledby="operations-heading">
+          <div class="panel-header"><div><p class="eyebrow">01 / OPERATIONEEL BEELD</p><h2 id="operations-heading">Voertuigen</h2></div><button id="refresh" class="quiet">Vernieuwen ↻</button></div>
+          <p id="data-error" class="error inset" role="alert"></p>
+          <div id="vehicle-list" class="vehicle-list" aria-label="Voertuigen selecteren"></div>
+          <div id="vehicle-detail" class="vehicle-detail"><p class="muted">Selecteer een voertuig om de status en bronnen te bekijken.</p></div>
+        </section>
+        <section class="panel agent" aria-labelledby="agent-heading">
+          <div class="panel-header"><div><p class="eyebrow">02 / ONDERZOEK</p><h2 id="agent-heading">Vraag het PortOps</h2></div><span id="model-status" class="model-badge">Verbinding controleren</span></div>
+          <p id="model-note" class="model-note"></p>
+          <div id="chat" class="chat" role="log" aria-live="polite" aria-relevant="additions"><div class="welcome"><span class="agent-monogram" aria-hidden="true">P↗</span><h3>Waar wil je op inzoomen?</h3><p>Stel een vraag over de voertuigen, blokkades of scheepsinformatie binnen jouw klantomgeving.</p></div></div>
+          <div class="suggestions"><button data-question="Welke voertuigen vragen vandaag aandacht en waarom?">Wat heeft prioriteit?</button><button data-question="Waarom is DEMO-003 niet klaar voor afhaling?">Waarom is DEMO-003 niet RFP?</button></div>
+          <form id="question-form" class="composer"><label class="sr-only" for="question">Vraag aan PortOps</label><textarea id="question" rows="2" maxlength="2000" placeholder="Stel een operationele vraag…" required></textarea><div><span>Alleen lezen · Antwoorden met bronnen</span><button id="send" type="submit" class="primary">Onderzoeken ↗</button></div></form>
+          <button id="cancel" class="quiet cancel" hidden>Onderzoek stoppen</button>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer><span>PORTOPS AI</span><span>Fictieve gegevens. Geen koppeling met een echte terminal.</span></footer>
+</body>
+</html>

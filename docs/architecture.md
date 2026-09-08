@@ -1,8 +1,8 @@
-# Architecture decisions — milestone 1
+# Architecture decisions
 
 ## Keep operational rules independent of a model
 
-`PortOps.Domain` has no external package dependencies. `ReadinessPolicy` determines pickup and loading readiness; `OperationsService` scopes reads and computes attention. A future model will consume these services through tools rather than calculating its own deadlines or overriding holds.
+`PortOps.Domain` has no external package dependencies. `ReadinessPolicy` determines pickup and loading readiness; `OperationsService` scopes reads and computes attention. The agent consumes these services through tools rather than calculating its own deadlines or overriding holds.
 
 ## Make evidence a first-class return value
 
@@ -25,3 +25,7 @@ This milestone implements the domain directly without copying shipment-tracking-
 ## Next boundary
 
 Connect one real model to scoped read tools, preserve tool evidence IDs and add agent evaluation cases. Add procedure retrieval and reviewable proposals after that loop works. Do not represent a hardcoded responder or mock model as a functioning AI agent.
+
+## Read-only agent boundary
+
+`PortOps.Agent` wraps scoped domain reads through three strict tools. The Responses adapter replays all output items, including reasoning, with storage disabled. Client history remains untrusted user text. Findings must cite retrieved evidence IDs; membership validation does not prove factual entailment. One investigation per customer, bounded turns/tool calls, provider timeouts and response-size limits constrain execution. ActivitySource spans contain timing/status/usage metadata; no exporter is configured yet. See [setup and validation](agent-setup.md).

@@ -4,6 +4,8 @@
 
 | Method / path | Result |
 | --- | --- |
+| GET /api/agent/status | Model configuration status and read-only limits |
+| POST /api/agent/investigate | Bounded investigation with findings, evidence and execution metadata |
 | GET /health | Public liveness and synthetic-demo label |
 | GET /api/demo | Customer scope, fixed clock and demo policy metadata |
 | GET /api/vehicles | Scoped vehicles, evidence, holds, events and both readiness assessments |
@@ -39,8 +41,12 @@ The horizon changes deadline urgency; it does not hide other operational excepti
 
 ## Limits
 
-Data is in memory and immutable by API design. No persistence, external data adapter, user management, roles, model calls, document retrieval, action approval, telemetry exporter or live updates are present. The fixed clock is deliberately separate from wall time. The synthetic active-hold collection is a snapshot of unresolved holds at that scenario time, not a historical event replay engine.
+Data is in memory and immutable by API design. No persistence, external data adapter, user management, roles, document retrieval, action approval, telemetry exporter or live updates are present. The fixed clock is deliberately separate from wall time. The synthetic active-hold collection is a snapshot of unresolved holds at that scenario time, not a historical event replay engine.
 
 ## Validation
 
 Run `dotnet test PortOps.slnx`. The initial 39 cases cover fixture outcomes, hold precedence, discharge/release separation, stale/future observations, source conflicts, deadline/horizon boundaries, time injection, customer isolation, authentication and HTTP contracts. These are software tests, not model evaluations or an agent accuracy score.
+
+## Agent milestone
+
+See [Agent setup](agent-setup.md) for request format, configuration, limits and validation boundaries. Model adapter, scripted-model tests and a local interface are now implemented. No live-model quality score is claimed.
