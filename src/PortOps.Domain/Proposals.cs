@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -53,6 +54,14 @@ public sealed class ProposalStore : IDisposable
 
     public ActionProposal Write(string? id, Func<ActionProposal?, ActionProposal> change)
     {
+        using var activity = DomainDiagnostics.Activities.StartActivity("proposal.persist");
+        try { return WriteCore(id, change); }
+        catch (ProposalFailure failure) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", failure.Code); throw; }
+        catch { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "unexpected"); throw; }
+    }
+
+    private ActionProposal WriteCore(string? id, Func<ActionProposal?, ActionProposal> change)
+    {
         lock (gate)
         {
             var next = change(id is not null ? records.GetValueOrDefault(id) : null);
@@ -82,23 +91,23 @@ public sealed class ProposalService(OperationsService operations, ProcedureCatal
     public IReadOnlyList<ActionProposal> List(string customerId) => store.List(customerId)
         .Select(p => p.Status == "draft" && p.ExpiresAt <= actionClock.GetUtcNow() ? p with { Status = "expired" } : p).ToArray();
 
-    public ActionProposal Create(ProposalActor actor, string vehicleId) => store.Write(null, _ =>
+    public ActionProposal Create(ProposalActor actor, string vehicleId) => Observe("proposal.create", () => store.Write(null, _ =>
     {
         if (store.List(actor.CustomerId).Count >= 500)
             throw new ProposalFailure("capacity", "The local demo proposal limit has been reached.");
         return Build(actor, vehicleId);
-    });
+    }));
 
-    public ActionProposal Refresh(ProposalActor actor, string id, int version) => store.Write(id, current =>
+    public ActionProposal Refresh(ProposalActor actor, string id, int version) => Observe("proposal.refresh", () => store.Write(id, current =>
     {
         var previous = Scoped(actor, current, version);
         if (previous.Status != "draft") throw new ProposalFailure("conflict", "Only drafts can be refreshed.");
         var next = Build(actor, previous.VehicleId);
         return next with { Id = previous.Id, Version = previous.Version + 1, CreatedAt = previous.CreatedAt,
             Audit = [.. previous.Audit, new("refreshed", actor.Id, actionClock.GetUtcNow(), previous.Version + 1)] };
-    });
+    }));
 
-    public ActionProposal Decide(ProposalActor actor, string id, int version, string payloadHash, bool approve) => store.Write(id, current =>
+    public ActionProposal Decide(ProposalActor actor, string id, int version, string payloadHash, bool approve) => Observe(approve ? "proposal.approve" : "proposal.reject", () => store.Write(id, current =>
     {
         if (!actor.CanApprove) throw new ProposalFailure("forbidden", "A reviewer identity is required.");
         var p = Scoped(actor, current, version);
@@ -119,7 +128,15 @@ public sealed class ProposalService(OperationsService operations, ProcedureCatal
             Delivery = new("sim-" + Guid.NewGuid().ToString("N"), now, p.Destination, p.Subject, p.Body),
             Audit = [.. p.Audit, new("approved", actor.Id, now, version), new("simulated_delivery", actor.Id, now, version)]
         };
-    });
+    }));
+
+    private static ActionProposal Observe(string name, Func<ActionProposal> action)
+    {
+        using var activity = DomainDiagnostics.Activities.StartActivity(name);
+        try { var result = action(); activity?.SetTag("proposal.outcome", result.Status); return result; }
+        catch (ProposalFailure failure) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", failure.Code); throw; }
+        catch { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "unexpected"); throw; }
+    }
 
     private ActionProposal Build(ProposalActor actor, string vehicleId)
     {

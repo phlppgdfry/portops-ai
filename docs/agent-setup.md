@@ -38,7 +38,7 @@ Run `dotnet test PortOps.slnx`. Domain, API, tool, runner and HTTP adapter tests
 
 After configuring a real model, verify attention overview, DEMO-003 damage hold, DEMO-004 discharge versus pickup release, DEMO-005 conflicting observations and inaccessible DEMO-007. Review every finding against its cited records. Record provider, deployment/model version, run date, prompts, outcomes and failures; do not publish a quality score before evaluation.
 
-Citation validation checks that references were retrieved, not that every sentence follows from those references. Versioned lexical procedure retrieval, local durable approvals and an evaluation runner are implemented. Telemetry export, production database/identity and live-model validation remain outstanding.
+Citation validation checks that references were retrieved, not that every sentence follows from those references. Versioned lexical procedure retrieval, local durable approvals and an evaluation runner are implemented. Local monitoring and diagnostic JSON export are implemented. External OTLP export, production database/identity and live-model validation remain outstanding.
 
 ## Live evaluation runner
 

@@ -35,3 +35,7 @@ Configure the provider using [agent-setup.md](agent-setup.md), restart, then ask
 - “Maak een conceptbericht voor DEMO-003. Nog niets versturen.”
 
 The agent has five tools and can prepare a draft, but cannot approve it. Missing model configuration disables chat while the direct operational and review flows remain usable. Source membership validation is not a guarantee of factual correctness; run and manually review the evaluation cases before making quality claims.
+
+## Inspect the recorded workflow
+
+As reviewer, open **04 / Technische monitoring** and press **Vernieuwen** after creating or reviewing a proposal. Expand the relevant request to inspect its steps and duration. **Download meetgegevens** saves a customer-scoped JSON report. Counts reset at server restart; the proposal audit log remains durable. See [monitoring](monitoring.md) for details.

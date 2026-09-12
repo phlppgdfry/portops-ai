@@ -13,6 +13,20 @@ public sealed partial class AgentRunner(IAgentModel model, OperationalTools tool
 
     public async Task<AgentResult> RunAsync(string customerId, AgentRequest request, CancellationToken cancellationToken)
     {
+        using var activity = ResponsesModel.Activities.StartActivity("agent.investigate");
+        try
+        {
+            var result = await RunCoreAsync(customerId, request, cancellationToken);
+            activity?.SetTag("agent.outcome", result.Status);
+            return result;
+        }
+        catch (AgentFailure failure) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", failure.Code); throw; }
+        catch (OperationCanceledException) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "cancelled"); throw; }
+        catch { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "unexpected"); throw; }
+    }
+
+    private async Task<AgentResult> RunCoreAsync(string customerId, AgentRequest request, CancellationToken cancellationToken)
+    {
         ValidateRequest(request);
         if (!options.IsConfigured) throw new AgentFailure("not_configured", "The model is not connected yet. Operational data remains available.");
         var gate = gates.GetOrAdd(customerId, _ => new SemaphoreSlim(1, 1));
@@ -30,7 +44,6 @@ public sealed partial class AgentRunner(IAgentModel model, OperationalTools tool
 
     private async Task<AgentResult> InvestigateAsync(string customerId, AgentRequest request, CancellationToken token)
     {
-        using var activity = ResponsesModel.Activities.StartActivity("agent.investigate");
         var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString("N");
         var timer = Stopwatch.StartNew();
         var items = new List<JsonElement>();
@@ -100,6 +113,7 @@ public sealed partial class AgentRunner(IAgentModel model, OperationalTools tool
                     var toolName = call.Name is "get_attention" or "get_vehicle" or "get_vessel_call" or "search_procedures" or "propose_notification" ? call.Name : "rejected_tool";
                     toolActivity?.SetTag("tool.name", toolName);
                     toolActivity?.SetTag("tool.status", result.Status);
+                    if (result.Status != "ok") toolActivity?.SetStatus(ActivityStatusCode.Error);
                     executions.Add(new(toolName, result.Status, toolTimer.ElapsedMilliseconds));
                     var json = JsonSerializer.Serialize(result, AgentJson.Options);
                     if (json.Length > 100_000) throw new AgentFailure("tool_limit", "Tool output exceeded the investigation limit.");

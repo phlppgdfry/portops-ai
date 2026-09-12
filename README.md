@@ -43,6 +43,7 @@ See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configura
 - Bounded model loop and retrieved-source validation.
 - Separate reviewer identity, exact-version approval and durable simulated delivery with audit records.
 - Dutch operations desk with vehicle investigation, source details and cancellable chat.
+- Reviewer-only local monitoring with per-request step details and downloadable diagnostic data.
 
 Northstar's default overview contains five attention items:
 
@@ -82,13 +83,15 @@ Customer-service and planning workflows are applications of the same operations 
 - Local atomic JSON proposal storage, lexical procedure retrieval and demo reviewer/customer authorization (implemented).
 - PostgreSQL, richer retrieval and production identity (planned).
 - Persisted approval workflow, idempotent simulated execution and audit records (implemented; no external delivery).
-- ActivitySource instrumentation and a nine-case live-model evaluation runner (implemented; real-model results and telemetry export pending).
+- Local reviewer monitoring: correlated request/model/tool traces, failures, durations, reported token usage and customer-scoped JSON export (implemented; external OTLP export remains optional).
+- Nine-case live-model evaluation runner (implemented; real-model results pending).
 - MCP and Azure deployment after the first complete workflow is verified.
 
 See the progress document for the current milestone and its validation limits. Provider SDKs and deployment details must be verified against official documentation during implementation.
 
 ## Documentation
 
+- [Local monitoring and diagnostic boundaries](docs/monitoring.md)
 - [Five-minute demo and review flow](docs/demo-walkthrough.md)
 - [Original product vision and workflow](docs/product-vision.md)
 - [Current progress and resume point](docs/progress.md)

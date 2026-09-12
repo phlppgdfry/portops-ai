@@ -88,8 +88,10 @@ public sealed class ResponsesModel(HttpClient client, AgentOptions options) : IA
             activity?.SetTag("gen_ai.usage.output_tokens", usage?.OutputTokens);
             return new(outputs, calls, texts.Count > 0 ? string.Join("", texts) : null, usage, refused);
         }
-        catch (HttpRequestException) { throw new AgentFailure("provider_error", "The model provider is unreachable. No answer was generated."); }
+        catch (AgentFailure failure) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", failure.Code); throw; }
+        catch (OperationCanceledException) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "cancelled"); throw; }
+        catch (HttpRequestException) { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "provider_error"); throw new AgentFailure("provider_error", "The model provider is unreachable. No answer was generated."); }
         catch (Exception e) when (e is JsonException or KeyNotFoundException or InvalidOperationException or FormatException)
-        { throw new AgentFailure("provider_protocol", "The model provider returned an unsupported response."); }
+        { activity?.SetStatus(ActivityStatusCode.Error); activity?.SetTag("error.type", "provider_protocol"); throw new AgentFailure("provider_protocol", "The model provider returned an unsupported response."); }
     }
 }

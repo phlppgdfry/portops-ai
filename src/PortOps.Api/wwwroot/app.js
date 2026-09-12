@@ -3,6 +3,7 @@
 const $ = selector => document.querySelector(selector);
 let token = '', epoch = 0, vehicles = [], overview = null, selected = null;
 let canApprove = false, proposalRows = [], proposalBusy = false, proposalFetch = 0;
+let monitoringFetch = 0;
 let history = [], modelReady = false, busy = false, requestController = null;
 const date = value => value ? new Intl.DateTimeFormat('nl-BE', {
   timeZone: 'Europe/Brussels', dateStyle: 'medium', timeStyle: 'short'
@@ -52,10 +53,12 @@ async function loadWorkspace() {
     overview = attention; vehicles = rows; modelReady = status.configured;
     canApprove = metadata.canApprove; proposalRows = proposals;
     $('#role-label').textContent = canApprove ? 'Beoordelaar' : 'Operator';
+    $('#monitoring-panel').hidden = !canApprove;
     $('#review-note').textContent = canApprove
       ? 'Controleer de volledige inhoud en bronnen. Goedkeuring registreert alleen een simulatie; er gaat geen e-mail uit.'
       : 'Je kunt concepten voorbereiden. Meld je met een aparte beoordelaarscode aan om ze goed te keuren of af te wijzen.';
     renderProposals();
+    if (canApprove) loadMonitoring();
     $('#customer-label').textContent = metadata.customerId === 'northstar' ? 'Northstar Motors' : 'Harborline Motors';
     $('#scenario-time').textContent = date(metadata.scenarioTime);
     $('#scenario-time').dateTime = metadata.scenarioTime;
@@ -181,6 +184,8 @@ $('#login-form').addEventListener('submit', async event => {
 $('#refresh').addEventListener('click', () => loadWorkspace().catch(error => $('#data-error').textContent = error.message));
 $('#logout').addEventListener('click', () => {
   epoch++; requestController?.abort(); token = ''; history = []; vehicles = []; overview = null; selected = null;
+  $('#export-monitoring').disabled = false; $('#refresh-monitoring').disabled = false;
+  $('#monitoring-panel').hidden = true; $('#monitoring-panel').open = false; $('#monitoring-traces').replaceChildren(); $('#monitoring-metrics').replaceChildren(); $('#monitoring-error').textContent = ''; $('#monitoring-window').textContent = ''; $('#monitoring-model').textContent = '';
   proposalRows = []; canApprove = false; proposalBusy = false; $('#proposal-list').replaceChildren(); $('#proposal-error').textContent = ''; $('#role-label').textContent = '';
   modelReady = false; busy = false; $('#workspace').hidden = true; $('#login').hidden = false; $('#logout').hidden = true;
   $('#chat').replaceChildren(); $('#vehicle-list').replaceChildren(); $('#vehicle-detail').replaceChildren();
@@ -278,3 +283,65 @@ async function proposalAction(path, payload) {
   }
 }
 $('#refresh-proposals').addEventListener('click', loadProposals);
+
+const operationNames = {
+  'api.request': 'API-aanvraag', 'agent.investigate': 'Agentonderzoek', 'model.responses': 'Modelaanroep',
+  'tool.execute': 'Operationele tool', 'procedure.search': 'Procedures zoeken', 'proposal.create': 'Concept voorbereiden',
+  'proposal.refresh': 'Concept actualiseren', 'proposal.approve': 'Goedkeuring controleren',
+  'proposal.reject': 'Voorstel afwijzen', 'proposal.persist': 'Voorstel verwerken en opslaan'
+};
+const ms = value => value === null ? 'Niet gemeten' : `${value.toFixed(1)} ms`;
+async function loadMonitoring() {
+  if (!canApprove) return;
+  const currentEpoch = epoch, requestId = ++monitoringFetch;
+  $('#refresh-monitoring').disabled = true; $('#monitoring-error').textContent = '';
+  try {
+    const result = await api('/api/monitoring');
+    if (currentEpoch !== epoch || requestId !== monitoringFetch) return;
+    $('#monitoring-window').textContent = `Maximaal ${result.capacity} afgeronde aanvragen uit de laatste ${result.windowMinutes} minuten. Meetvenster vanaf ${date(result.windowStart)}. Het overzicht wordt leeggemaakt bij een serverherstart.`;
+    const metrics = $('#monitoring-metrics'); metrics.replaceChildren();
+    for (const [label, value] of [['Aanvragen', result.requests], ['HTTP 4xx / 5xx', `${result.clientErrors} / ${result.serverErrors}`], ['Gemiddelde', ms(result.averageMs)], ['95e percentiel', ms(result.p95Ms)]]) {
+      const box = el('div'); box.append(el('span', '', label), el('strong', '', String(value))); metrics.append(box);
+    }
+    $('#monitoring-model').textContent = `${result.modelCalls} gemeten modelcalls · ${result.toolCalls} toolcalls · ` +
+      (result.inputTokens === null || result.outputTokens === null ? 'Tokenverbruik niet of onvolledig gemeten.' : `Tokens: ${result.inputTokens} in / ${result.outputTokens} uit.`) +
+      (modelReady ? '' : ' De modelverbinding staat nog uit.') +
+      (result.traces.some(trace => trace.truncated) ? ' Sommige traces zijn ingekort; staptellingen zijn onvolledig.' : '');
+    const list = $('#monitoring-traces'); list.replaceChildren();
+    if (!result.traces.length) list.append(el('p', 'muted', 'Nog geen afgeronde aanvragen. Bekijk een voertuig of bereid een concept voor en vernieuw dit overzicht.'));
+    else list.append(el('p', 'muted', `Laatste ${Math.min(20, result.traces.length)} van ${result.traces.length} bewaarde aanvragen. HTTP 4xx telt onder andere afgewezen of ongeldige aanvragen; HTTP 5xx telt server- en providerproblemen.`));
+    for (const trace of result.traces.slice(0, 20)) {
+      const block = el('details', 'request-trace');
+      block.append(el('summary', '', `${trace.method} ${trace.route} · HTTP ${trace.statusCode} · ${ms(trace.durationMs)}`));
+      block.append(el('p', 'muted', `${date(trace.startedAt)} · Trace ${trace.traceId} · Aanvraag ${trace.requestId}`));
+      if (trace.truncated) block.append(el('p', 'warning', 'Deze trace is ingekort vanwege de limiet op het aantal stappen.'));
+      const table = el('table', 'trace-table'); const head = el('tr');
+      for (const label of ['Stap', 'Start', 'Duur', 'Resultaat']) head.append(el('th', '', label));
+      const thead = el('thead'); thead.append(head); table.append(thead);
+      const body = el('tbody');
+      for (const step of trace.steps) {
+        const row = el('tr');
+        const label = `${operationNames[step.operation] || step.operation}${step.attributes['tool.name'] ? ` · ${step.attributes['tool.name']}` : ''}`;
+        const cell = el('td', '', label); cell.append(el('small', 'span-parent', `Span ${step.spanId}${step.parentSpanId ? ` · onder ${step.parentSpanId}` : ' · hoofdaanvraag'}`));
+        row.append(cell, el('td', '', ms(step.offsetMs)), el('td', '', ms(step.durationMs)), el('td', step.status === 'error' ? 'error' : '',
+          step.attributes['error.type'] || step.attributes['tool.status'] || step.attributes['proposal.outcome'] || (step.status === 'error' ? 'Fout' : 'OK')));
+        body.append(row);
+      }
+      table.append(body); const overflow = el('div', 'trace-table-wrap'); overflow.append(table); block.append(overflow); list.append(block);
+    }
+  } catch (error) { if (currentEpoch === epoch && requestId === monitoringFetch) $('#monitoring-error').textContent = error.message; }
+  finally { if (currentEpoch === epoch && requestId === monitoringFetch) $('#refresh-monitoring').disabled = false; }
+}
+$('#refresh-monitoring').addEventListener('click', loadMonitoring);
+$('#monitoring-panel').addEventListener('toggle', () => { if ($('#monitoring-panel').open) loadMonitoring(); });
+$('#export-monitoring').addEventListener('click', async () => {
+  const currentEpoch = epoch; $('#export-monitoring').disabled = true;
+  try {
+    const result = await api('/api/monitoring/export');
+    if (currentEpoch !== epoch) return;
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' }));
+    const link = el('a'); link.href = url; link.download = 'portops-monitoring.json'; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (error) { if (currentEpoch === epoch) $('#monitoring-error').textContent = error.message; }
+  finally { if (currentEpoch === epoch) $('#export-monitoring').disabled = false; }
+});

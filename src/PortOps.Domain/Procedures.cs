@@ -26,14 +26,17 @@ public sealed class ProcedureCatalog
 
     public IReadOnlyList<Procedure> Search(string customerId, string query)
     {
+        using var activity = DomainDiagnostics.Activities.StartActivity("procedure.search");
         if (string.IsNullOrWhiteSpace(query) || query.Length > 200)
             throw new ArgumentException("Use a procedure query of 1–200 characters.");
         var words = query.ToLowerInvariant().Split([' ', ',', '.', ';', '?', '-', '/', '\n'], StringSplitOptions.RemoveEmptyEntries);
-        return documents.Where(d => d.CustomerId is null || d.CustomerId == customerId)
+        var results = documents.Where(d => d.CustomerId is null || d.CustomerId == customerId)
             .Select(d => (Document: d, Score: words.Count(word => word.Length >= 3 &&
                 (d.Keywords.Any(k => k.Contains(word, StringComparison.OrdinalIgnoreCase)) || d.Title.Contains(word, StringComparison.OrdinalIgnoreCase)))))
             .Where(x => x.Score > 0).OrderByDescending(x => x.Score).ThenBy(x => x.Document.Id)
             .Take(4).Select(x => x.Document).ToArray();
+        activity?.SetTag("procedure.result_count", results.Length);
+        return results;
     }
 
     public IReadOnlyList<Procedure> ForVehicle(string customerId, VehicleInvestigation vehicle) =>

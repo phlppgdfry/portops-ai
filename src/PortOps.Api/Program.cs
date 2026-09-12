@@ -10,7 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 65_536);
 builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
+{
+    // ASP.NET's default traceId is an Activity.Id (a full traceparent). Use the same W3C trace ID as our header and timeline.
+    context.ProblemDetails.Extensions["traceId"] = System.Diagnostics.Activity.Current?.TraceId.ToString()
+        ?? context.HttpContext.TraceIdentifier;
+    if (context.HttpContext.Response.Headers.TryGetValue("X-PortOps-Request-Id", out var requestId))
+        context.ProblemDetails.Extensions["requestId"] = requestId.ToString();
+});
 builder.Services.AddAuthentication(DemoAuthentication.SchemeName)
     .AddScheme<AuthenticationSchemeOptions, DemoAuthentication>(DemoAuthentication.SchemeName, _ => { });
 builder.Services.AddAuthorization(options => options.AddPolicy("Reviewer", policy => policy.RequireRole("Reviewer")));
@@ -41,6 +48,7 @@ builder.Services.AddSingleton(serviceProvider => new ProposalService(
     serviceProvider.GetRequiredService<ProposalStore>(), TimeProvider.System));
 builder.Services.AddSingleton<OperationalTools>();
 builder.Services.AddSingleton<AgentRunner>();
+builder.Services.AddSingleton(_ => new LocalMonitoring());
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -56,6 +64,7 @@ var app = builder.Build();
 _ = app.Services.GetRequiredService<DemoCredentials>();
 _ = app.Services.GetRequiredService<AgentOptions>();
 _ = app.Services.GetRequiredService<ProposalStore>();
+_ = app.Services.GetRequiredService<LocalMonitoring>();
 app.UseExceptionHandler();
 app.Use(async (context, next) =>
 {
@@ -72,7 +81,9 @@ app.Use(async (context, next) =>
 });
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthentication();
+app.UseMiddleware<MonitoringMiddleware>();
 app.UseAuthorization();
 app.UseRateLimiter();
 app.MapGet("/health", () => Results.Ok(new { status = "ok", mode = "synthetic-demo" }));
@@ -128,9 +139,17 @@ api.MapPost("/agent/investigate", async (AgentRequest request, AgentRunner agent
             _ => 502
         };
         return Results.Problem(statusCode: status, title: "Investigation unavailable", detail: failure.Message,
-            extensions: new Dictionary<string, object?> { ["code"] = failure.Code, ["traceId"] = context.TraceIdentifier });
+            extensions: new Dictionary<string, object?> { ["code"] = failure.Code, ["traceId"] = System.Diagnostics.Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier });
     }
 }).RequireRateLimiting("agent");
+
+api.MapGet("/monitoring", (ClaimsPrincipal user, LocalMonitoring monitor) => Results.Ok(monitor.Snapshot(Customer(user))))
+    .RequireAuthorization("Reviewer");
+api.MapGet("/monitoring/requests/{id}", (string id, ClaimsPrincipal user, LocalMonitoring monitor) =>
+    monitor.Find(Customer(user), id) is { } trace ? Results.Ok(trace) : Results.NotFound()).RequireAuthorization("Reviewer");
+api.MapGet("/monitoring/export", (ClaimsPrincipal user, LocalMonitoring monitor) => Results.File(
+    System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(monitor.Snapshot(Customer(user)), new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web)),
+    "application/json", "portops-monitoring.json")).RequireAuthorization("Reviewer");
 
 ProposalEndpoints.Map(api);
 

@@ -49,6 +49,17 @@
         <p id="proposal-error" class="error inset" role="alert"></p>
         <div id="proposal-list" class="proposal-list"><p class="muted">Er zijn nog geen voorstellen. Kies een voertuig en maak een conceptbericht.</p></div>
       </section>
+      <details id="monitoring-panel" class="panel monitoring-panel" hidden>
+        <summary>04 / Technische monitoring</summary>
+        <div class="monitoring-content">
+          <div class="panel-header"><div><h2>Aanvragen en doorlooptijden</h2><p class="muted">Alleen deze klantomgeving · werkelijke tijd · geen berichtinhoud</p></div><div class="monitoring-actions"><button id="refresh-monitoring" class="quiet">Vernieuwen ↻</button><button id="export-monitoring" class="quiet">Download meetgegevens</button></div></div>
+          <p id="monitoring-error" class="error" role="alert"></p>
+          <p id="monitoring-window" class="muted">Meetgegevens laden…</p>
+          <div id="monitoring-metrics" class="metrics"></div>
+          <p id="monitoring-model" class="muted"></p>
+          <div id="monitoring-traces" class="monitoring-traces"></div>
+        </div>
+      </details>
     </section>
   </main>
   <footer><span>PORTOPS AI</span><span>Fictieve gegevens. Geen koppeling met een echte terminal.</span></footer>

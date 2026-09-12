@@ -13,6 +13,9 @@
 | POST /api/proposals/{id}/refresh | Regenerate a draft from current records using expected `version` |
 | POST /api/proposals/{id}/approve | Reviewer-only exact `version` + `payloadHash` approval and simulated delivery |
 | POST /api/proposals/{id}/reject | Reviewer-only exact-version rejection |
+| GET /api/monitoring | Reviewer-only customer-scoped request metrics and traces |
+| GET /api/monitoring/requests/{id} | One locally generated request ID; 404 if unavailable in scope |
+| GET /api/monitoring/export | Reviewer-only diagnostic JSON download |
 | GET /health | Public liveness and synthetic-demo label |
 | GET /api/demo | Customer scope, fixed clock and demo policy metadata |
 | GET /api/vehicles | Scoped vehicles, evidence, holds, events and both readiness assessments |
@@ -65,3 +68,7 @@ See [Agent setup](agent-setup.md) for request format, configuration, limits and 
 Proposal expiry uses wall-clock UTC (30 minutes), separate from fixed operational scenario time. Refresh increments the version and regenerates the payload from current facts. Approval requires matching version, payload hash, unexpired status and an unchanged fingerprint of relevant operational records and procedures. A mismatch returns 409; another customer's proposal is 404 and an operator's approval attempt is 403.
 
 The local store defaults to `src/PortOps.Api/App_Data/proposals.json` (ignored by Git, outside static files); configure `Proposals:Path` to override. One process owns the store. Each mutation flushes a new snapshot before atomic replacement and only then publishes in-memory state. Approval, audit and simulated receipt are written together. Retry returns the same receipt; real email is never sent. This is a bounded local demo store (500 proposals per customer), not a multi-instance database or real-delivery outbox. Keep the data directory to preserve the audit trail across restarts.
+
+## Monitoring
+
+Local application tracing and JSON export are implemented. See [monitoring](monitoring.md) for measured operations, retention, privacy boundaries and interpretation. External telemetry export remains optional.
