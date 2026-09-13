@@ -51,4 +51,4 @@ As reviewer, open **04 / Technische monitoring** and press **Vernieuwen** after 
 
 ## Remaining visual acceptance checks
 
-On desktop and a narrow mobile viewport, walk through login, planning horizon selection, vehicle sources, draft creation, reviewer login, exact-version approval, audit and monitoring. Check keyboard focus, horizontal planning-table scrolling, expanded sources and readable long proposal text. Also inspect empty lists and interrupted network requests. These browser checks are pending; passing API tests alone does not establish visual usability.
+On desktop and a narrow mobile viewport, walk through login, planning horizon selection, vehicle sources, draft creation, reviewer login, exact-version approval, audit and monitoring. Check keyboard focus, horizontal planning-table scrolling, expanded sources and readable long proposal text. Also inspect empty lists and interrupted network requests. The reviewer route and layouts at desktop, 390px and 320px were checked on 2026-09-13. See [browser findings](browser-check.md) for the exact coverage, keyboard fixes and remaining checks; passing API tests alone does not establish visual usability.

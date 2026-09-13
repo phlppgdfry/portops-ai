@@ -35,8 +35,8 @@
           <p id="planning-window" class="muted"></p>
           <div id="planning-metrics" class="metrics"></div>
           <div id="planning-warnings"></div>
-          <h3>Voorraad volgens opname</h3><p id="planning-stock-note" class="muted"></p><div id="planning-stock" class="planning-table-wrap"></div>
-          <h3 class="arrivals-heading">Verwachte scheepsaankomsten</h3><p id="planning-arrival-note" class="muted"></p><div id="planning-arrivals" class="planning-table-wrap"></div>
+          <p class="table-hint muted">Op een smal scherm kun je de tabellen horizontaal verschuiven. Gebruik de pijltjestoetsen wanneer de tabel focus heeft.</p><h3>Voorraad volgens opname</h3><p id="planning-stock-note" class="muted"></p><div id="planning-stock" class="planning-table-wrap" tabindex="0" role="region" aria-label="Voorraadtabel, horizontaal verschuifbaar"></div>
+          <h3 class="arrivals-heading">Verwachte scheepsaankomsten</h3><p id="planning-arrival-note" class="muted"></p><div id="planning-arrivals" class="planning-table-wrap" tabindex="0" role="region" aria-label="Aankomsttabel, horizontaal verschuifbaar"></div>
           <div id="planning-sources"></div>
         </div>
       </section>
@@ -45,7 +45,7 @@
           <div class="panel-header"><div><p class="eyebrow">01 / OPERATIONEEL BEELD</p><h2 id="operations-heading">Voertuigen</h2></div><button id="refresh" class="quiet">Vernieuwen ↻</button></div>
           <p id="data-error" class="error inset" role="alert"></p>
           <div id="vehicle-list" class="vehicle-list" aria-label="Voertuigen selecteren"></div>
-          <div id="vehicle-detail" class="vehicle-detail"><p class="muted">Selecteer een voertuig om de status en bronnen te bekijken.</p></div>
+          <div id="vehicle-detail" class="vehicle-detail" tabindex="-1" aria-label="Voertuigonderzoek"><p class="muted">Selecteer een voertuig om de status en bronnen te bekijken.</p></div>
         </section>
         <section class="panel agent" aria-labelledby="agent-heading">
           <div class="panel-header"><div><p class="eyebrow">02 / ONDERZOEK</p><h2 id="agent-heading">Vraag het PortOps</h2></div><span id="model-status" class="model-badge">Verbinding controleren</span></div>

@@ -392,7 +392,7 @@ async function loadPlanning() {
     for (const row of result.stock) {
       const tr = el('tr'), vehicle = el('td'), states = el('td'), holds = el('td'), deadline = el('td'), sources = el('td');
       const button = el('button', 'quiet', row.vehicleId); button.type = 'button';
-      button.addEventListener('click', () => { selectVehicle(row.vehicleId); $('#vehicle-detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      button.addEventListener('click', () => { selectVehicle(row.vehicleId); $('#vehicle-detail').focus({ preventScroll: true }); $('#vehicle-detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
       vehicle.append(button, el('small', 'muted', row.bookingId));
       states.append(el('p', '', `Afhaling: ${stateNames[row.pickup]}`), el('p', '', `Laden: ${stateNames[row.loading]}`));
       if (!row.inventoryCurrent) states.append(el('p', 'warning', 'Aanwezigheid opnieuw controleren'));
@@ -404,7 +404,7 @@ async function loadPlanning() {
       sources.append(sourceList(row.evidence)); tr.append(vehicle, states, holds, deadline, sources); stock.body.append(tr);
     }
     $('#planning-stock').replaceChildren(result.stock.length ? stock.table : el('p', 'muted', 'Geen controleerbare voorraad binnen deze klantomgeving.'));
-    $('#planning-arrival-note').textContent = `${result.expectedVesselCalls} scheepsbezoeken · ${result.knownInboundVehicles} voertuigen uit plannen met een bekend, actueel volume · ${result.inboundPlansWithUnknownVolume} plannen zonder bruikbaar volume. Aankomst betekent geen lossing of vrijgave. Deze aantallen zijn geen voorraadprognose.`;
+    $('#planning-arrival-note').textContent = `${result.expectedVesselCalls} ${result.expectedVesselCalls === 1 ? 'scheepsbezoek' : 'scheepsbezoeken'} · ${result.knownInboundVehicles} voertuigen uit plannen met een bekend, actueel volume · ${result.inboundPlansWithUnknownVolume} ${result.inboundPlansWithUnknownVolume === 1 ? 'plan' : 'plannen'} zonder bruikbaar volume. Aankomst betekent geen lossing of vrijgave. Deze aantallen zijn geen voorraadprognose.`;
     const arrivals = planningTable(['Schip / aankomstplan', 'Aankomstverwachting', 'Gepland volume', 'Opvolging', 'Bronnen']);
     const volumeNames = { known: 'Bekend', unknown: 'Nog onbekend', stale: 'Verouderd', conflicting: 'Tegenstrijdig', invalid: 'Ongeldig' };
     for (const row of result.arrivals) {

@@ -50,7 +50,7 @@ flowchart TD
 4. **Controle, 90 seconden.** Maak een nieuw concept. Meld aan als beoordelaar, lees de volledige inhoud en bronnen, vink de controle aan en simuleer de verzending. Toon het auditlog en simulatiebewijs. Een verlopen concept moet eerst een nieuwe versie krijgen.
 5. **Engineering en grens, 60 seconden.** Toon de monitoring en het bovenstaande schema. Benoem de 127 geslaagde softwaretests en de nog niet uitgevoerde echte modelevaluatie. Het vraaggesprek is uitgeschakeld zolang geen model is ingesteld.
 
-Gebruik voor een opname een nieuw fictief concept en toon nooit toegangscodes, providersleutels of gebruikersgeheimen. De route in de browser moet nog volledig visueel worden gecontroleerd voordat deze handleiding als opnamechecklist wordt afgevinkt.
+Gebruik voor een opname een nieuw fictief concept en toon nooit toegangscodes, providersleutels of gebruikersgeheimen. De beoordelaarsroute is in Chrome gecontroleerd; zie [browsercontrole](browser-check.md) voor de exacte dekking en resterende punten vóór een definitieve opname.
 
 ## Antwoorden op vragen van een beoordelaar
 
