@@ -38,8 +38,9 @@ See [Agent setup and validation](docs/agent-setup.md) for Azure OpenAI configura
 - Open holds, unknown completion times, stale observations and conflicting sources.
 - An attention overview with deterministic urgency categories; no invented delay probabilities.
 - Customer-scoped vehicle, booking and vessel-call endpoints.
+- Planning overview with explicit stock, pickup readiness, holds, expected arrivals and separately counted inbound volumes.
 - Authenticated HTTP integration tests alongside domain acceptance tests.
-- Five scoped agent tools: attention, vehicle, vessel call, procedure search and notification draft.
+- Six scoped agent tools: attention, vehicle, vessel call, planning, procedure search and notification draft.
 - Bounded model loop and retrieved-source validation.
 - Separate reviewer identity, exact-version approval and durable simulated delivery with audit records.
 - Dutch operations desk with vehicle investigation, source details and cancellable chat.
@@ -84,13 +85,14 @@ Customer-service and planning workflows are applications of the same operations 
 - PostgreSQL, richer retrieval and production identity (planned).
 - Persisted approval workflow, idempotent simulated execution and audit records (implemented; no external delivery).
 - Local reviewer monitoring: correlated request/model/tool traces, failures, durations, reported token usage and customer-scoped JSON export (implemented; external OTLP export remains optional).
-- Nine-case live-model evaluation runner (implemented; real-model results pending).
+- Ten-case live-model evaluation runner (implemented; real-model results pending).
 - MCP and Azure deployment after the first complete workflow is verified.
 
 See the progress document for the current milestone and its validation limits. Provider SDKs and deployment details must be verified against official documentation during implementation.
 
 ## Documentation
 
+- [Planning definitions and reproducible demo counts](docs/planning.md)
 - [Local monitoring and diagnostic boundaries](docs/monitoring.md)
 - [Five-minute demo and review flow](docs/demo-walkthrough.md)
 - [Original product vision and workflow](docs/product-vision.md)

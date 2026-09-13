@@ -27,6 +27,8 @@ builder.Services.AddSingleton(snapshot);
 builder.Services.AddSingleton<TimeProvider>(new ScenarioClock(snapshot.ScenarioTime));
 builder.Services.AddSingleton<ReadinessPolicy>();
 builder.Services.AddSingleton<OperationsService>();
+builder.Services.AddSingleton(DemoPlanning.Create(snapshot.ScenarioTime));
+builder.Services.AddSingleton<PlanningService>();
 builder.Services.AddSingleton(serviceProvider =>
 {
     var settings = new AgentOptions();
@@ -116,6 +118,10 @@ api.MapGet("/operations/attention", (int? horizonHours, OperationsService operat
         ? Results.ValidationProblem(new Dictionary<string, string[]> { ["horizonHours"] = ["Must be between 1 and 168."] })
         : Results.Ok(operations.GetAttention(Customer(user), horizon));
 });
+api.MapGet("/planning", (int? horizonDays, ClaimsPrincipal user, PlanningService planning) =>
+    horizonDays is < 1 or > 14
+        ? Results.Problem(statusCode: 400, detail: "Use a planning horizon from 1 to 14 days.")
+        : Results.Ok(planning.GetOverview(Customer(user), horizonDays ?? 7)));
 api.MapGet("/agent/status", (AgentOptions settings) => Results.Ok(new
 {
     configured = settings.IsConfigured, provider = settings.Provider,

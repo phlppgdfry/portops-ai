@@ -3,12 +3,14 @@
 const $ = selector => document.querySelector(selector);
 let token = '', epoch = 0, vehicles = [], overview = null, selected = null;
 let canApprove = false, proposalRows = [], proposalBusy = false, proposalFetch = 0;
-let monitoringFetch = 0;
+let monitoringFetch = 0, planningFetch = 0;
 let history = [], modelReady = false, busy = false, requestController = null;
 const date = value => value ? new Intl.DateTimeFormat('nl-BE', {
   timeZone: 'Europe/Brussels', dateStyle: 'medium', timeStyle: 'short'
 }).format(new Date(value)) + ' · Brussel' : 'Niet bekend';
 const stateNames = { Ready: 'Gereed', Blocked: 'Geblokkeerd', Unknown: 'Onbekend', Conflicting: 'Tegenstrijdig' };
+const holdReason = value => ({ 'Damage assessment pending': 'Schadebeoordeling nog open', 'Pre-delivery inspection incomplete': 'Inspectie vóór aflevering nog niet afgerond', 'Pickup release check pending': 'Controle voor afhaalvrijgave nog open' }[value] || value);
+const ownerName = value => ({ 'damage-team': 'Schadeteam', 'vehicle-processing': 'Voertuigbewerking', 'release-desk': 'Vrijgavebalie' }[value] || value);
 const priorityNames = { Critical: 'Verstreken', High: 'Dringend', Review: 'Opvolgen' };
 // UI elements are constructed with textContent. Neither model output nor sources become HTML.
 function el(tag, className, text) {
@@ -76,6 +78,7 @@ async function loadWorkspace() {
     selected = vehicles.some(x => x.vehicle.id === selected) ? selected : attention.items[0]?.vehicleId || vehicles[0]?.vehicle.id;
     if (selected) selectVehicle(selected);
     updateControls();
+    loadPlanning();
   } finally { if (currentEpoch === epoch) $('#refresh').disabled = false; }
 }
 function renderVehicles() {
@@ -86,7 +89,7 @@ function renderVehicles() {
     const item = overview.items.find(x => x.vehicleId === id);
     const button = el('button', 'vehicle-row'); button.type = 'button'; button.dataset.vehicle = id;
     const copy = el('span'); copy.append(el('span', 'vehicle-id', id));
-    const actualReason = investigation.vehicle.activeHolds[0]?.reason
+    const actualReason = holdReason(investigation.vehicle.activeHolds[0]?.reason)
       || (investigation.loading.state === 'Conflicting' || investigation.pickup.state === 'Conflicting' ? 'Bronnen spreken elkaar tegen'
         : investigation.loading.state === 'Unknown' || investigation.pickup.state === 'Unknown' ? 'Onvoldoende actuele statusgegevens'
           : 'Status of bronkwaliteit opvolgen');
@@ -123,7 +126,7 @@ function selectVehicle(id) {
   }
   detail.append(grid);
   for (const hold of result.vehicle.activeHolds) {
-    const block = el('div', 'hold'); block.append(el('p', '', hold.reason), el('small', '', `Opvolging: ${hold.owner}`));
+    const block = el('div', 'hold'); block.append(el('p', '', holdReason(hold.reason)), el('small', '', `Opvolging: ${ownerName(hold.owner)}`));
     block.append(el('small', '', hold.estimatedCompletion ? `Geschatte afronding: ${date(hold.estimatedCompletion)}. Dit is geen vrijgave.` : 'Afronding: onbekend. Er is geen afhaaltijd bevestigd.')); detail.append(block);
   }
   for (const warning of new Set([...result.pickup.warnings, ...result.loading.warnings])) detail.append(el('p', 'warning', warning));
@@ -184,6 +187,9 @@ $('#login-form').addEventListener('submit', async event => {
 $('#refresh').addEventListener('click', () => loadWorkspace().catch(error => $('#data-error').textContent = error.message));
 $('#logout').addEventListener('click', () => {
   epoch++; requestController?.abort(); token = ''; history = []; vehicles = []; overview = null; selected = null;
+  planningFetch++; $('#planning-days').value = '7'; $('#refresh-planning').disabled = false; $('#planning-content').setAttribute('aria-busy', 'false');
+  for (const id of ['planning-metrics', 'planning-stock', 'planning-arrivals', 'planning-sources', 'planning-warnings']) $(`#${id}`).replaceChildren();
+  for (const id of ['planning-error', 'planning-window', 'planning-stock-note', 'planning-arrival-note']) $(`#${id}`).textContent = '';
   $('#export-monitoring').disabled = false; $('#refresh-monitoring').disabled = false;
   $('#monitoring-panel').hidden = true; $('#monitoring-panel').open = false; $('#monitoring-traces').replaceChildren(); $('#monitoring-metrics').replaceChildren(); $('#monitoring-error').textContent = ''; $('#monitoring-window').textContent = ''; $('#monitoring-model').textContent = '';
   proposalRows = []; canApprove = false; proposalBusy = false; $('#proposal-list').replaceChildren(); $('#proposal-error').textContent = ''; $('#role-label').textContent = '';
@@ -286,7 +292,7 @@ $('#refresh-proposals').addEventListener('click', loadProposals);
 
 const operationNames = {
   'api.request': 'API-aanvraag', 'agent.investigate': 'Agentonderzoek', 'model.responses': 'Modelaanroep',
-  'tool.execute': 'Operationele tool', 'procedure.search': 'Procedures zoeken', 'proposal.create': 'Concept voorbereiden',
+  'planning.overview': 'Planning berekenen', 'tool.execute': 'Operationele tool', 'procedure.search': 'Procedures zoeken', 'proposal.create': 'Concept voorbereiden',
   'proposal.refresh': 'Concept actualiseren', 'proposal.approve': 'Goedkeuring controleren',
   'proposal.reject': 'Voorstel afwijzen', 'proposal.persist': 'Voorstel verwerken en opslaan'
 };
@@ -345,3 +351,65 @@ $('#export-monitoring').addEventListener('click', async () => {
   } catch (error) { if (currentEpoch === epoch) $('#monitoring-error').textContent = error.message; }
   finally { if (currentEpoch === epoch) $('#export-monitoring').disabled = false; }
 });
+
+function planningTable(headers) {
+  const table = el('table', 'planning-table'); const thead = el('thead'), head = el('tr');
+  for (const label of headers) { const th = el('th', '', label); th.scope = 'col'; head.append(th); }
+  thead.append(head); table.append(thead); const body = el('tbody'); table.append(body); return { table, body };
+}
+async function loadPlanning() {
+  const currentEpoch = epoch, requestId = ++planningFetch, days = $('#planning-days').value;
+  $('#refresh-planning').disabled = true; $('#planning-content').setAttribute('aria-busy', 'true'); $('#planning-error').textContent = '';
+  try {
+    const result = await api(`/api/planning?horizonDays=${encodeURIComponent(days)}`);
+    if (currentEpoch !== epoch || requestId !== planningFetch) return;
+    $('#planning-window').textContent = `Scenariovenster: ${date(result.evaluatedAt)} tot ${date(result.windowEnd)}. Voorraden en verwachtingen zijn afzonderlijke tellingen.`;
+    const metrics = $('#planning-metrics'); metrics.replaceChildren();
+    for (const [label, count] of [['Gereed voor afhaling', result.readyForPickup], ['Voertuigen met blokkade', result.vehiclesWithHolds], ['Bronnen controleren', result.vehiclesNeedingDataReview], ['Bekend inkomend volume', result.knownInboundVehicles]]) {
+      const item = el('div'); item.append(el('span', '', label), el('strong', '', String(count))); metrics.append(item);
+    }
+    const warnings = $('#planning-warnings'); warnings.replaceChildren();
+    for (const message of result.warnings) warnings.append(el('p', 'warning', message));
+    $('#planning-stock-note').textContent = `${result.inventoryCount} unieke voertuigen volgens de voorraadopname · ${result.openHolds} open blokkades. Gereed voor afhaling is geen bevestigde afhaalafspraak. Klik op een voertuig voor onderzoek.`;
+    const stock = planningTable(['Voertuig', 'Afhaling / laden', 'Blokkades en bronkwaliteit', 'Laaddeadline', 'Bronnen']);
+    const deadlines = { elapsed: 'Verstreken', within_window: 'Binnen venster', outside_window: 'Buiten venster', not_set: 'Niet vastgelegd' };
+    for (const row of result.stock) {
+      const tr = el('tr'), vehicle = el('td'), states = el('td'), holds = el('td'), deadline = el('td'), sources = el('td');
+      const button = el('button', 'quiet', row.vehicleId); button.type = 'button';
+      button.addEventListener('click', () => { selectVehicle(row.vehicleId); $('#vehicle-detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      vehicle.append(button, el('small', 'muted', row.bookingId));
+      states.append(el('p', '', `Afhaling: ${stateNames[row.pickup]}`), el('p', '', `Laden: ${stateNames[row.loading]}`));
+      if (!row.inventoryCurrent) states.append(el('p', 'warning', 'Aanwezigheid opnieuw controleren'));
+      for (const hold of row.holds) holds.append(el('p', '', `${holdReason(hold.reason)} · ${ownerName(hold.owner)}`),
+        el('small', 'muted', hold.estimatedCompletion ? `Geschatte afronding: ${date(hold.estimatedCompletion)}; geen vrijgave.` : 'Afronding onbekend.'));
+      if (!row.holds.length) holds.append(el('p', 'muted', 'Geen actieve blokkade geregistreerd.'));
+      for (const note of row.warnings) holds.append(el('p', 'warning', note));
+      deadline.append(el('p', '', deadlines[row.deadlineStatus]), el('small', 'muted', row.loadingDeadline ? date(row.loadingDeadline) : 'Geen laaddeadline in de boeking.'));
+      sources.append(sourceList(row.evidence)); tr.append(vehicle, states, holds, deadline, sources); stock.body.append(tr);
+    }
+    $('#planning-stock').replaceChildren(result.stock.length ? stock.table : el('p', 'muted', 'Geen controleerbare voorraad binnen deze klantomgeving.'));
+    $('#planning-arrival-note').textContent = `${result.expectedVesselCalls} scheepsbezoeken · ${result.knownInboundVehicles} voertuigen uit plannen met een bekend, actueel volume · ${result.inboundPlansWithUnknownVolume} plannen zonder bruikbaar volume. Aankomst betekent geen lossing of vrijgave. Deze aantallen zijn geen voorraadprognose.`;
+    const arrivals = planningTable(['Schip / aankomstplan', 'Aankomstverwachting', 'Gepland volume', 'Opvolging', 'Bronnen']);
+    const volumeNames = { known: 'Bekend', unknown: 'Nog onbekend', stale: 'Verouderd', conflicting: 'Tegenstrijdig', invalid: 'Ongeldig' };
+    for (const row of result.arrivals) {
+      const tr = el('tr'), vessel = el('td'), time = el('td'), volume = el('td'), notes = el('td'), sources = el('td');
+      vessel.append(el('strong', '', row.vessel), el('small', 'muted', `${row.vesselCallId} · ${row.planId}`));
+      time.append(el('p', '', date(row.estimatedArrival)), el('small', 'muted', `In planning: ${date(row.arrivalInPlanning)}`));
+      volume.append(el('strong', '', row.expectedVehicles === null ? 'Onbekend' : `${row.expectedVehicles} voertuigen`), el('small', 'muted', volumeNames[row.volumeStatus]));
+      for (const note of row.warnings) notes.append(el('p', 'warning', note));
+      if (!row.warnings.length) notes.append(el('p', 'muted', 'Geen aanvullende bronwaarschuwingen.'));
+      sources.append(sourceList(row.evidence)); tr.append(vessel, time, volume, notes, sources); arrivals.body.append(tr);
+    }
+    $('#planning-arrivals').replaceChildren(result.arrivals.length ? arrivals.table : el('p', 'muted', 'Geen nog te arriveren scheepsbezoeken met een toegankelijk aankomstplan in dit venster.'));
+    $('#planning-sources').replaceChildren(sourceList(result.evidence.filter(source => source.id.startsWith('planning-summary-')), 'Berekening en definities bekijken'));
+  } catch (error) {
+    if (currentEpoch === epoch && requestId === planningFetch) {
+      $('#planning-error').textContent = error.message;
+      // Do not display old figures under a newly selected horizon.
+      for (const id of ['planning-metrics', 'planning-stock', 'planning-arrivals', 'planning-sources', 'planning-warnings']) $(`#${id}`).replaceChildren();
+      $('#planning-window').textContent = 'Planning kon niet worden geladen.'; $('#planning-stock-note').textContent = ''; $('#planning-arrival-note').textContent = '';
+    }
+  } finally { if (currentEpoch === epoch && requestId === planningFetch) { $('#refresh-planning').disabled = false; $('#planning-content').setAttribute('aria-busy', 'false'); } }
+}
+$('#planning-days').addEventListener('change', loadPlanning);
+$('#refresh-planning').addEventListener('click', loadPlanning);

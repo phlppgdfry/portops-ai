@@ -20,12 +20,12 @@ public sealed class LocalMonitoring : IDisposable
     public static readonly ActivitySource Activities = new("PortOps.Api");
     private const string ScopeKey = "PortOps.Internal.MonitoringScope";
     private static readonly HashSet<string> Operations = ["api.request", "agent.investigate", "model.responses",
-        "tool.execute", "procedure.search", "proposal.create", "proposal.refresh", "proposal.approve", "proposal.reject", "proposal.persist"];
+        "tool.execute", "procedure.search", "planning.overview", "proposal.create", "proposal.refresh", "proposal.approve", "proposal.reject", "proposal.persist"];
     private static readonly HashSet<string> Codes = ["ok", "answered", "insufficient_evidence", "refused", "draft", "executed", "rejected",
         "invalid_request", "not_configured", "configuration", "busy", "timeout", "tool_limit", "turn_limit", "ungrounded_answer",
         "provider_error", "provider_protocol", "provider_incomplete", "provider_http_error", "invalid_arguments", "not_found",
         "unknown_tool", "unavailable", "capacity", "forbidden", "conflict", "expired", "stale", "cancelled", "unexpected"];
-    private static readonly HashSet<string> Tools = ["get_attention", "get_vehicle", "get_vessel_call", "search_procedures", "propose_notification", "rejected_tool"];
+    private static readonly HashSet<string> Tools = ["get_attention", "get_planning", "get_vehicle", "get_vessel_call", "search_procedures", "propose_notification", "rejected_tool"];
     private readonly object gate = new();
     private readonly Dictionary<string, Queue<RequestTrace>> customers = new(StringComparer.Ordinal);
     private readonly ActivityListener listener;

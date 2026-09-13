@@ -26,7 +26,7 @@ public sealed class ResponsesModelTests
             using var body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync());
             Assert.False(body.RootElement.GetProperty("store").GetBoolean());
             Assert.Equal("required", body.RootElement.GetProperty("tool_choice").GetString());
-            Assert.Equal(5, body.RootElement.GetProperty("tools").GetArrayLength());
+            Assert.Equal(6, body.RootElement.GetProperty("tools").GetArrayLength());
             Assert.True(body.RootElement.GetProperty("text").GetProperty("format").GetProperty("strict").GetBoolean());
             Assert.Contains("reasoning.encrypted_content", body.RootElement.GetProperty("include").EnumerateArray().Select(x => x.GetString()));
             return new(HttpStatusCode.OK) { Content = new StringContent("""

@@ -25,16 +25,23 @@ On a fresh machine, set distinct `DemoAuth__Keys__northstar` and `DemoAuth__Revi
 7. Inspect the audit log and simulation receipt. No actual email was sent. Refreshing or retrying approval cannot produce a second delivery.
 8. Optionally create a second draft and reject it. An expired draft can be refreshed into a new version; review that new version before approving.
 
+## Planning without a model
+
+Open **Voorraad en verwachte aankomsten**. With 7 days selected, Northstar shows 6 stock vehicles, 2 pickup-ready vehicles, 3 vehicles with holds and 2 requiring source review. Expected arrivals contain 12 vehicles with a known current volume and one plan with unknown volume. These are separate from current stock.
+
+Switch to 1 day: stock remains 6, while only IN-101 remains in the arrival list. Expand its sources to compare the older planning time with the current vessel ETA. Click a stock vehicle to investigate its readiness and owner. No arrival or readiness indicator promises a pickup appointment.
+
 ## Flow with a model
 
 Configure the provider using [agent-setup.md](agent-setup.md), restart, then ask:
 
 - “Welke voertuigen vragen vandaag aandacht?”
+- “Maak een planningsoverzicht voor de komende 7 dagen: voorraad, afhaling, blokkades en inkomende volumes.”
 - “Waarom is DEMO-004 niet klaar voor afhaling?”
 - “Welke fictieve procedure geldt bij een schadeblokkade?”
 - “Maak een conceptbericht voor DEMO-003. Nog niets versturen.”
 
-The agent has five tools and can prepare a draft, but cannot approve it. Missing model configuration disables chat while the direct operational and review flows remain usable. Source membership validation is not a guarantee of factual correctness; run and manually review the evaluation cases before making quality claims.
+The agent has six tools and can prepare a draft, but cannot approve it. Missing model configuration disables chat while the direct operational and review flows remain usable. Source membership validation is not a guarantee of factual correctness; run and manually review the evaluation cases before making quality claims.
 
 ## Inspect the recorded workflow
 

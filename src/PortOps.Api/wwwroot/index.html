@@ -27,6 +27,18 @@
     <section id="workspace" hidden>
       <div class="page-title"><div><p class="eyebrow">WERKRUIMTE / OPERATIONS</p><h1>Wat vraagt aandacht?</h1></div><div class="scenario"><span class="dot"></span><div><strong>Fictief scenario</strong><time id="scenario-time"></time></div></div></div>
       <div class="metrics" aria-label="Operationeel overzicht"><div><span>Voertuigen in scope</span><strong id="total">—</strong></div><div><span>Aandacht nodig</span><strong id="attention-total">—</strong></div><div><span>Deadline verstreken</span><strong id="critical-total">—</strong></div><div class="metric-note"><span>Bronnen vóór conclusies.</span><p>Status, onzekerheid en herkomst blijven zichtbaar.</p></div></div>
+      <section class="panel planning-panel" aria-labelledby="planning-heading">
+        <div class="panel-header"><div><p class="eyebrow">KLANTPLANNING / FICTIEVE GEGEVENS</p><h2 id="planning-heading">Voorraad en verwachte aankomsten</h2></div><div class="planning-controls"><label for="planning-days">Vooruitkijken</label><select id="planning-days"><option value="1">Komende 24 uur</option><option value="7" selected>Komende 7 dagen</option><option value="14">Komende 14 dagen</option></select><button id="refresh-planning" class="quiet">Vernieuwen ↻</button></div></div>
+        <div class="planning-content" id="planning-content" aria-busy="false">
+          <p id="planning-error" class="error" role="alert"></p>
+          <p id="planning-window" class="muted"></p>
+          <div id="planning-metrics" class="metrics"></div>
+          <div id="planning-warnings"></div>
+          <h3>Voorraad volgens opname</h3><p id="planning-stock-note" class="muted"></p><div id="planning-stock" class="planning-table-wrap"></div>
+          <h3 class="arrivals-heading">Verwachte scheepsaankomsten</h3><p id="planning-arrival-note" class="muted"></p><div id="planning-arrivals" class="planning-table-wrap"></div>
+          <div id="planning-sources"></div>
+        </div>
+      </section>
       <div class="desk">
         <section class="panel operations" aria-labelledby="operations-heading">
           <div class="panel-header"><div><p class="eyebrow">01 / OPERATIONEEL BEELD</p><h2 id="operations-heading">Voertuigen</h2></div><button id="refresh" class="quiet">Vernieuwen ↻</button></div>

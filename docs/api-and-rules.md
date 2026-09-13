@@ -20,11 +20,14 @@
 | GET /api/demo | Customer scope, fixed clock and demo policy metadata |
 | GET /api/vehicles | Scoped vehicles, evidence, holds, events and both readiness assessments |
 | GET /api/vehicles/{id} | One scoped vehicle investigation; 404 for absent or inaccessible records |
+| GET /api/planning?horizonDays=7 | Scoped inventory, readiness, holds and explicit inbound plans; 1–14 days, default 7 |
 | GET /api/bookings | Scoped booking deadlines and vessel-call references |
 | GET /api/vessel-calls/{id} | A call referenced by a scoped booking; no other customer's bookings included |
 | GET /api/operations/attention?horizonHours=24 | Prioritized vehicle attention items, grouped by booking ID in the payload |
 
-All `/api` routes require `Authorization: Bearer <configured-demo-token>`. Missing/invalid credentials return 401. Horizon must be an integer from 1 to 168; invalid input returns 400. Operational records remain read-only. Drafts and human decisions are writable; no real notification or terminal-release endpoint exists.
+All `/api` routes require `Authorization: Bearer <configured-demo-token>`. Missing/invalid credentials return 401. The attention horizon in hours must be an integer from 1 to 168; invalid input returns 400. Operational records remain read-only. Drafts and human decisions are writable; no real notification or terminal-release endpoint exists.
+
+Planning uses the fixed scenario clock and keeps stock and expected inbound volumes separate. See [planning policy](planning.md) for null volumes, freshness, horizon and deduplication rules.
 
 ## Readiness policy v1
 

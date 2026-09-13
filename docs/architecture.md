@@ -28,7 +28,7 @@ Configure and evaluate a real model using the prepared dataset. Do not represent
 
 ## Read-only agent boundary
 
-`PortOps.Agent` wraps scoped domain reads through five strict tools. The Responses adapter replays all output items, including reasoning, with storage disabled. Client history remains untrusted user text. Findings must cite retrieved evidence IDs; membership validation does not prove factual entailment. One investigation per customer, bounded turns/tool calls, provider timeouts and response-size limits constrain execution. ActivitySource spans contain timing/status/usage metadata; a bounded local listener collects them and exposes customer-scoped diagnostic JSON; no external OTLP exporter is configured. See [setup and validation](agent-setup.md).
+`PortOps.Agent` wraps scoped domain reads through six strict tools. The Responses adapter replays all output items, including reasoning, with storage disabled. Client history remains untrusted user text. Findings must cite retrieved evidence IDs; membership validation does not prove factual entailment. One investigation per customer, bounded turns/tool calls, provider timeouts and response-size limits constrain execution. ActivitySource spans contain timing/status/usage metadata; a bounded local listener collects them and exposes customer-scoped diagnostic JSON; no external OTLP exporter is configured. See [setup and validation](agent-setup.md).
 
 ## Durable human review
 
@@ -37,3 +37,7 @@ The model can retrieve original versioned fictional procedures through a lexical
 ## Local monitoring boundary
 
 A request scope created after authentication owns its traces. ActivityListener collects only supported PortOps operations and explicitly allowed tags; parent/child span IDs preserve causality. A bounded, ephemeral per-customer store serves reviewer-only diagnostic endpoints. Route templates replace raw paths. Export returns the same scoped JSON and contains no payloads or credentials. See [monitoring](monitoring.md) for limits and tests.
+
+## Planning
+
+`DemoPlanning` defines explicit customer-owned inventory positions and inbound plans, separately from vehicle and vessel records. `PlanningService` joins only scoped operational reads and returns deterministic counts, source evidence and quality warnings. The API and `get_planning` tool share this service; browser code only presents its results. See [planning policy](planning.md).
