@@ -13,9 +13,10 @@ Updated: 2026-09-13. Product intent: [original vision](product-vision.md).
 - Monitoring collects customer-scoped traces, timings, errors and reported model usage; a reviewer can inspect and export a bounded local snapshot.
 - Customer-scoped planning with explicit inventory and inbound volumes, 1/7/14-day UI horizons, source warnings and a sixth agent tool. See [planning rules](planning.md).
 - 127 automated tests pass in Release configuration. Monitoring tests cover correlation, privacy, retention and customer/role isolation. Software tests cover customer/role isolation, changed/expired proposals, concurrent approvals, restart persistence and failure handling.
+- Dutch [portfolio explanation and five-minute script](portfolio-uitleg.md), with architecture map and explicit claim boundaries.
 - Ten-case live-model evaluation runner with saved reports and explicit manual review requirements.
 
-UI validation: JavaScript syntax and HTML selector checks passed; isolated runtime checks covered successful API responses, 11 HTTP errors, network failure, cancellation and malformed JSON. The 127-test Release suite remains green. No desktop/mobile browser visual check was performed for this copy milestone.
+UI validation: JavaScript syntax and HTML selector checks passed; isolated runtime checks covered successful API responses, 11 HTTP errors, network failure, cancellation and malformed JSON. The 127-test Release suite remains green. The updated login screen was verified in Chrome on 2026-09-13. Authenticated desktop/mobile visual checks remain pending: native file navigation for the existing login code did not respond reliably. No full browser-flow pass is claimed.
 
 ## Current validation boundary
 
@@ -34,7 +35,7 @@ Provider endpoint, deployment/model name and API key are still unavailable. No r
 
 1. Visually walk through the complete demo on desktop and mobile, including keyboard navigation and empty/error states. Copy and inline guidance are implemented; browser visual verification is still pending.
 2. When the owner chooses model access, configure it and run/manual-review the prepared evaluation dataset. Add adversarial retrieved-document cases and address observed failures.
-3. Prepare the architecture walkthrough, actual evaluation report, demo video and v1.0 release.
+3. Use the prepared architecture walkthrough and script to record the demo; add the actual evaluation report and prepare the v1.0 release.
 
 Paid model access and Azure resources are intentionally deferred. Monitoring works locally without them; no live-model results are claimed.
 

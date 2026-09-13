@@ -92,6 +92,8 @@ See the progress document for the current milestone and its validation limits. P
 
 ## Documentation
 
+- [Nederlandse portfolio-uitleg, architectuurschema en demonstratiescript](docs/portfolio-uitleg.md)
+
 - [Planning definitions and reproducible demo counts](docs/planning.md)
 - [Local monitoring and diagnostic boundaries](docs/monitoring.md)
 - [Five-minute demo and review flow](docs/demo-walkthrough.md)
