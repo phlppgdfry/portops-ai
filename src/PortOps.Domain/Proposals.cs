@@ -149,12 +149,12 @@ public sealed class ProposalService(OperationsService operations, ProcedureCatal
         var zone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Brussels");
         var scenarioTime = TimeZoneInfo.ConvertTime(operations.Now, zone).ToString("yyyy-MM-dd HH:mm");
         var holds = vehicle.Vehicle.ActiveHolds.Count == 0 ? "Geen actieve blokkades geregistreerd." :
-            string.Join("\n", vehicle.Vehicle.ActiveHolds.Select(h => $"- {h.Reason}; verantwoordelijke: {h.Owner}; " +
+            string.Join("\n", vehicle.Vehicle.ActiveHolds.Select(h => $"- {Dutch(h.Reason)}; verantwoordelijke: {Dutch(h.Owner)}; " +
                 (h.EstimatedCompletion is { } estimate ? $"geschatte afronding {TimeZoneInfo.ConvertTime(estimate, zone):yyyy-MM-dd HH:mm} (Brussel), geen vrijgave." : "afronding onbekend.")));
         var warnings = vehicle.Pickup.Warnings.Concat(vehicle.Loading.Warnings).Distinct().ToArray();
         var body = $"Fictieve terminalstatus op {scenarioTime} (Brussel, scenariotijd).\n\n" +
             $"Voertuig: {vehicleId}\nAfhaling: {Label(vehicle.Pickup.State)}\nLaden: {Label(vehicle.Loading.State)}\n\n" + holds +
-            (warnings.Length > 0 ? "\n\nBronwaarschuwingen:\n" + string.Join("\n", warnings) : "") +
+            (warnings.Length > 0 ? "\n\nBronwaarschuwingen:\n" + string.Join("\n", warnings.Select(Dutch)) : "") +
             "\n\nGraag de actuele status en eventuele openstaande beperkingen controleren. Dit concept bevestigt geen afhaalafspraak of vrijgavetijd." +
             "\n\nFictieve werkinstructies:\n" + string.Join("\n", docs.Select(d => $"{d.Title} (v{d.Version}): {d.Text}")) +
             "\n\nBronnen: " + string.Join(", ", sources.Select(e => e.Id)) + "\n\nDemo: bij goedkeuring wordt uitsluitend een gesimuleerde verzending vastgelegd.";
@@ -177,6 +177,17 @@ public sealed class ProposalService(OperationsService operations, ProcedureCatal
         if (p.Version != version) throw new ProposalFailure("conflict", "The proposal version changed. Reload and review again.");
         return p;
     }
+    private static string Dutch(string value) => value switch
+    {
+        "Damage assessment pending" => "Schadebeoordeling nog open",
+        "Pre-delivery inspection incomplete" => "Inspectie vóór aflevering nog niet afgerond",
+        "Pickup release check pending" => "Controle voor afhaalvrijgave nog open",
+        "damage-team" => "Schadeteam", "vehicle-processing" => "Voertuigbewerking", "release-desk" => "Vrijgavebalie",
+        "Stale status observations were excluded from readiness decisions." => "Verouderde statusgegevens tellen niet mee bij de beoordeling van de gereedheid.",
+        "Future-dated status observations were excluded from readiness decisions." => "Statusgegevens met een toekomstige waarnemingstijd tellen niet mee bij de beoordeling.",
+        "A ready observation conflicts with an unresolved hold; the hold prevents release." => "Een bron meldt gereed, maar er staat nog een blokkade open. Die blokkade verhindert de vrijgave.",
+        _ => value
+    };
     private static string Label(ReadinessState state) => state switch
     {
         ReadinessState.Ready => "Gereed", ReadinessState.Blocked => "Geblokkeerd",

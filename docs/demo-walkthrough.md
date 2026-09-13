@@ -14,6 +14,8 @@ The launch profile defaults to 5088; this machine uses 5089 because AccessFlow o
 
 On a fresh machine, set distinct `DemoAuth__Keys__northstar` and `DemoAuth__ReviewerKeys__northstar` environment variables before starting. Generate each with `openssl rand -hex 24`. The operator investigates and prepares drafts; the reviewer can also decide on them.
 
+The workspace includes **Zo doorloop je de demo** with the same basic route. Newly prepared or refreshed concepts use Dutch hold descriptions; stored versions retain the exact text originally reviewed.
+
 ## Flow without a model
 
 1. Open http://localhost:5089 and enter the operator token.
@@ -46,3 +48,7 @@ The agent has six tools and can prepare a draft, but cannot approve it. Missing 
 ## Inspect the recorded workflow
 
 As reviewer, open **04 / Technische monitoring** and press **Vernieuwen** after creating or reviewing a proposal. Expand the relevant request to inspect its steps and duration. **Download meetgegevens** saves a customer-scoped JSON report. Counts reset at server restart; the proposal audit log remains durable. See [monitoring](monitoring.md) for details.
+
+## Remaining visual acceptance checks
+
+On desktop and a narrow mobile viewport, walk through login, planning horizon selection, vehicle sources, draft creation, reviewer login, exact-version approval, audit and monitoring. Check keyboard focus, horizontal planning-table scrolling, expanded sources and readable long proposal text. Also inspect empty lists and interrupted network requests. These browser checks are pending; passing API tests alone does not establish visual usability.

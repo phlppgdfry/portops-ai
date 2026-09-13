@@ -11,6 +11,11 @@ const date = value => value ? new Intl.DateTimeFormat('nl-BE', {
 const stateNames = { Ready: 'Gereed', Blocked: 'Geblokkeerd', Unknown: 'Onbekend', Conflicting: 'Tegenstrijdig' };
 const holdReason = value => ({ 'Damage assessment pending': 'Schadebeoordeling nog open', 'Pre-delivery inspection incomplete': 'Inspectie vóór aflevering nog niet afgerond', 'Pickup release check pending': 'Controle voor afhaalvrijgave nog open' }[value] || value);
 const ownerName = value => ({ 'damage-team': 'Schadeteam', 'vehicle-processing': 'Voertuigbewerking', 'release-desk': 'Vrijgavebalie' }[value] || value);
+const warningText = value => ({
+  'Stale status observations were excluded from readiness decisions.': 'Verouderde statusgegevens tellen niet mee bij de beoordeling van de gereedheid.',
+  'Future-dated status observations were excluded from readiness decisions.': 'Statusgegevens met een toekomstige waarnemingstijd tellen niet mee bij de beoordeling.',
+  'A ready observation conflicts with an unresolved hold; the hold prevents release.': 'Een bron meldt gereed, maar er staat nog een blokkade open. Die blokkade verhindert de vrijgave.'
+}[value] || value);
 const priorityNames = { Critical: 'Verstreken', High: 'Dringend', Review: 'Opvolgen' };
 // UI elements are constructed with textContent. Neither model output nor sources become HTML.
 function el(tag, className, text) {
@@ -20,22 +25,32 @@ function el(tag, className, text) {
   return node;
 }
 async function api(path, options = {}) {
-  const response = await fetch(path, { ...options, headers: {
-    'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', ...options.headers
-  } });
+  let response;
+  try {
+    response = await fetch(path, { ...options, headers: {
+      'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', ...options.headers
+    } });
+  } catch (error) {
+    if (error.name === 'AbortError') throw error;
+    throw new Error('Geen verbinding met PortOps. Controleer of de lokale demo actief is en probeer opnieuw.');
+  }
   if (!response.ok) {
-    const problem = await response.json().catch(() => ({}));
     const messages = {
+      400: 'De invoer is niet geldig. Controleer je gegevens en probeer opnieuw.',
+      404: 'Dit gegeven of voorstel is niet beschikbaar binnen jouw klantomgeving. Vernieuw het overzicht.',
+      500: 'PortOps kon de aanvraag niet verwerken. Probeer opnieuw; bekijk bij herhaling de technische monitoring.',
+      502: 'Het model leverde geen bruikbaar, gecontroleerd antwoord. Probeer het opnieuw.',
       401: 'Deze toegangscode is niet geldig. Meld je opnieuw aan.',
       403: 'Voor deze actie is een beoordelaarscode nodig.',
       409: 'Dit voorstel is verlopen, gewijzigd of al afgehandeld. Vernieuw het overzicht en controleer opnieuw.',
       429: 'Er loopt al een onderzoek of je hebt te snel opnieuw gevraagd. Probeer het straks nog eens.',
-      503: 'De modelverbinding is nog niet ingesteld. Je kunt de terminalgegevens wel bekijken.',
+      503: 'Deze functie is momenteel niet beschikbaar. Controleer de modelstatus of probeer later opnieuw.',
       504: 'Het onderzoek duurde te lang. Er wordt geen gedeeltelijk antwoord getoond.'
     };
-    throw new Error(messages[response.status] || problem.detail || 'De aanvraag is mislukt. Probeer opnieuw.');
+    throw new Error(messages[response.status] || 'De aanvraag is mislukt. Probeer opnieuw.');
   }
-  return response.json();
+  try { return await response.json(); }
+  catch { throw new Error('PortOps gaf een onleesbaar antwoord. Vernieuw het overzicht en probeer opnieuw.'); }
 }
 function updateControls() {
   $('#send').disabled = !modelReady || busy;
@@ -77,6 +92,7 @@ async function loadWorkspace() {
     renderVehicles();
     selected = vehicles.some(x => x.vehicle.id === selected) ? selected : attention.items[0]?.vehicleId || vehicles[0]?.vehicle.id;
     if (selected) selectVehicle(selected);
+    else $('#vehicle-detail').replaceChildren(el('p', 'muted', 'Geen voertuig beschikbaar om te onderzoeken.'));
     updateControls();
     loadPlanning();
   } finally { if (currentEpoch === epoch) $('#refresh').disabled = false; }
@@ -121,7 +137,7 @@ function selectVehicle(id) {
   investigate.dataset.question = `Onderzoek ${id}. Waarom vraagt dit voertuig aandacht en wat is nog onbekend?`;
   investigate.addEventListener('click', () => setQuestion(investigate.dataset.question)); top.append(investigate); detail.append(top);
   const grid = el('div', 'readiness-grid');
-  for (const [label, assessment] of [['Afhaling / RFP', result.pickup], ['Laden', result.loading]]) {
+  for (const [label, assessment] of [['Gereed voor afhaling', result.pickup], ['Laden', result.loading]]) {
     const box = el('div'); box.append(el('strong', '', label), el('span', `badge ${assessment.state}`, stateNames[assessment.state])); grid.append(box);
   }
   detail.append(grid);
@@ -129,7 +145,7 @@ function selectVehicle(id) {
     const block = el('div', 'hold'); block.append(el('p', '', holdReason(hold.reason)), el('small', '', `Opvolging: ${ownerName(hold.owner)}`));
     block.append(el('small', '', hold.estimatedCompletion ? `Geschatte afronding: ${date(hold.estimatedCompletion)}. Dit is geen vrijgave.` : 'Afronding: onbekend. Er is geen afhaaltijd bevestigd.')); detail.append(block);
   }
-  for (const warning of new Set([...result.pickup.warnings, ...result.loading.warnings])) detail.append(el('p', 'warning', warning));
+  for (const warning of new Set([...result.pickup.warnings, ...result.loading.warnings])) detail.append(el('p', 'warning', warningText(warning)));
   const sources = [...new Map([...result.pickup.evidence, ...result.loading.evidence,
     ...result.vehicle.events.map(event => event.evidence)].map(source => [source.id, source])).values()];
   detail.append(sourceList(sources));
@@ -171,7 +187,7 @@ function renderAnswer(result) {
     box.append(el('p', 'muted', 'Nog niet vastgesteld:'));
     const list = el('ul'); for (const unknown of result.unknowns) list.append(el('li', '', unknown)); box.append(list);
   }
-  const trace = el('details', 'trace'); trace.append(el('summary', '', `${result.tools.length} toolcalls · ${(result.durationMs / 1000).toFixed(1)} s · Onderzoeksdetails`));
+  const trace = el('details', 'trace'); trace.append(el('summary', '', `${result.tools.length} toolaanroepen · ${(result.durationMs / 1000).toFixed(1)} s · Onderzoeksdetails`));
   for (const tool of result.tools) trace.append(el('div', '', `${tool.name} — ${tool.status} — ${tool.durationMs} ms`));
   trace.append(el('div', '', result.usage ? `Tokens: ${result.usage.inputTokens} in / ${result.usage.outputTokens} uit` : 'Tokenverbruik niet gerapporteerd.'));
   trace.append(el('div', '', `Trace: ${result.traceId}`)); box.append(trace);
@@ -230,7 +246,7 @@ async function loadProposals() {
     const rows = await api('/api/proposals');
     if (currentEpoch !== epoch) return;
     if (fetchId !== proposalFetch) return;
-    proposalRows = rows; renderProposals();
+    proposalRows = rows; $('#proposal-error').textContent = ''; renderProposals();
   } catch (error) { if (currentEpoch === epoch) $('#proposal-error').textContent = error.message; }
 }
 function renderProposals() {
@@ -280,7 +296,7 @@ async function proposalAction(path, payload) {
     if (currentEpoch !== epoch) return;
     $('#proposals-heading').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (error) {
-    if (currentEpoch === epoch) { $('#proposal-error').textContent = error.message; await loadProposals(); }
+    if (currentEpoch === epoch) { await loadProposals(); if (currentEpoch === epoch) $('#proposal-error').textContent = error.message; }
   } finally {
     if (currentEpoch === epoch) {
       proposalBusy = false; renderProposals();
@@ -309,7 +325,7 @@ async function loadMonitoring() {
     for (const [label, value] of [['Aanvragen', result.requests], ['HTTP 4xx / 5xx', `${result.clientErrors} / ${result.serverErrors}`], ['Gemiddelde', ms(result.averageMs)], ['95e percentiel', ms(result.p95Ms)]]) {
       const box = el('div'); box.append(el('span', '', label), el('strong', '', String(value))); metrics.append(box);
     }
-    $('#monitoring-model').textContent = `${result.modelCalls} gemeten modelcalls · ${result.toolCalls} toolcalls · ` +
+    $('#monitoring-model').textContent = `${result.modelCalls} gemeten modelaanroepen · ${result.toolCalls} toolaanroepen · ` +
       (result.inputTokens === null || result.outputTokens === null ? 'Tokenverbruik niet of onvolledig gemeten.' : `Tokens: ${result.inputTokens} in / ${result.outputTokens} uit.`) +
       (modelReady ? '' : ' De modelverbinding staat nog uit.') +
       (result.traces.some(trace => trace.truncated) ? ' Sommige traces zijn ingekort; staptellingen zijn onvolledig.' : '');

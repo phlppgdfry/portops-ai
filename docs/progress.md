@@ -6,6 +6,7 @@ Updated: 2026-09-13. Product intent: [original vision](product-vision.md).
 
 - .NET operational API, synthetic RoRo records and deterministic readiness rules.
 - Dutch operations desk and bounded model loop with six tools.
+- Dutch navigation, displayed readiness warnings and newly generated draft text; inline demo guide and friendly connection/error messages. Existing source records and persisted draft versions retain their original text.
 - Customer-scoped versioned fictional procedure retrieval (lexical matching).
 - Deterministic notification drafts, separate reviewer identity and exact-version human approval/rejection.
 - Local durable proposals, audit history, expiry and idempotent simulated delivery. No real messages sent.
@@ -13,6 +14,8 @@ Updated: 2026-09-13. Product intent: [original vision](product-vision.md).
 - Customer-scoped planning with explicit inventory and inbound volumes, 1/7/14-day UI horizons, source warnings and a sixth agent tool. See [planning rules](planning.md).
 - 127 automated tests pass in Release configuration. Monitoring tests cover correlation, privacy, retention and customer/role isolation. Software tests cover customer/role isolation, changed/expired proposals, concurrent approvals, restart persistence and failure handling.
 - Ten-case live-model evaluation runner with saved reports and explicit manual review requirements.
+
+UI validation: JavaScript syntax and HTML selector checks passed; isolated runtime checks covered successful API responses, 11 HTTP errors, network failure, cancellation and malformed JSON. The 127-test Release suite remains green. No desktop/mobile browser visual check was performed for this copy milestone.
 
 ## Current validation boundary
 
@@ -29,7 +32,7 @@ Provider endpoint, deployment/model name and API key are still unavailable. No r
 
 ## Next work — portfolio v1.0
 
-1. Finish consistent Dutch copy and the complete demonstration flow.
+1. Visually walk through the complete demo on desktop and mobile, including keyboard navigation and empty/error states. Copy and inline guidance are implemented; browser visual verification is still pending.
 2. When the owner chooses model access, configure it and run/manual-review the prepared evaluation dataset. Add adversarial retrieved-document cases and address observed failures.
 3. Prepare the architecture walkthrough, actual evaluation report, demo video and v1.0 release.
 
