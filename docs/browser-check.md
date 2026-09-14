@@ -1,4 +1,4 @@
-# Browsercontrole — 13 september 2026
+# Browsercontrole — 13–14 september 2026
 
 Gecontroleerd in Chrome met Northstar als beoordelaar, tegen de lokale demo op poort 5089. Geen modelaanroepen of echte berichten verstuurd.
 
@@ -25,7 +25,14 @@ Gecontroleerd in Chrome met Northstar als beoordelaar, tegen de lokale demo op p
 - Planningstabellen een benoemd, focusbaar scrollgebied geven, met uitleg op smalle schermen.
 - Bij selectie vanuit de planning toetsenbordfocus naar het voertuigonderzoek verplaatsen.
 
-Deze verbeteringen zijn geïmplementeerd. De hertest na herladen wacht op opnieuw aanmelden; de toegangscode blijft bewust niet bewaard bij herladen.
+De drie verbeteringen zijn op 14 september in de ingelogde Chrome-demo hertest en geslaagd:
+
+- De weekplanning toont “1 plan”; de dagplanning toont “1 scheepsbezoek”.
+- ArrowRight verschuift zowel de voorraad- als aankomsttabel. De focus staat op het betreffende scrollgebied; de paginabreedte blijft 390 pixels.
+- Enter op DEMO-003 in de planning verplaatst de focus naar `vehicle-detail` en toont het juiste voertuigonderzoek. De mobiele weergave van dit onderzoek is visueel gecontroleerd.
+- Na afloop is de tijdelijke viewportinstelling verwijderd en de horizon teruggezet op 7 dagen. De gebruiker blijft ingelogd.
+
+Tijdens de hertest bleek een oude JavaScript-versie in de geopende pagina actief. De HTML verwijst nu naar script- en stijlbestanden met een inhoudsversie in de URL. De actuele script-URL en het nieuwe gedrag zijn in Chrome bevestigd. Bij toekomstige wijzigingen aan app.js/app.css moeten deze inhoudsversies in index.html mee worden bijgewerkt.
 
 ## Grenzen
 

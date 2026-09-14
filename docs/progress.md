@@ -1,6 +1,6 @@
 # Progress and resume point
 
-Updated: 2026-09-13. Product intent: [original vision](product-vision.md).
+Updated: 2026-09-14. Product intent: [original vision](product-vision.md).
 
 ## Completed
 
@@ -16,7 +16,7 @@ Updated: 2026-09-13. Product intent: [original vision](product-vision.md).
 - Dutch [portfolio explanation and five-minute script](portfolio-uitleg.md), with architecture map and explicit claim boundaries.
 - Ten-case live-model evaluation runner with saved reports and explicit manual review requirements.
 
-UI validation: JavaScript syntax and HTML selector checks passed; isolated runtime checks covered successful API responses, 11 HTTP errors, network failure, cancellation and malformed JSON. The 127-test Release suite remains green. Authenticated Chrome review on 2026-09-13 covered planning horizons, vehicle evidence, draft approval, audit, monitoring and layouts at desktop, 390px and 320px. Three small copy/keyboard fixes were identified; final retest is pending re-login. See [browser check](browser-check.md) for evidence and limits.
+UI validation: JavaScript syntax and HTML selector checks passed; isolated runtime checks covered successful API responses, 11 HTTP errors, network failure, cancellation and malformed JSON. The 127-test Release suite remains green. Authenticated Chrome review on 2026-09-13 covered planning horizons, vehicle evidence, draft approval, audit, monitoring and layouts at desktop, 390px and 320px. Three small copy/keyboard fixes passed an authenticated retest on 2026-09-14. Versioned asset URLs prevent reusing the earlier script URL. See [browser check](browser-check.md) for evidence and limits.
 
 ## Current validation boundary
 
@@ -33,7 +33,7 @@ Provider endpoint, deployment/model name and API key are still unavailable. No r
 
 ## Next work — portfolio v1.0
 
-1. Complete the final browser retest of the keyboard/copy fixes. The reviewer route and mobile layouts are checked; empty/error states still need visual coverage.
+1. Before the final recording, visually cover empty/error states; the reviewer route, mobile layouts and keyboard/copy retest are complete.
 2. When the owner chooses model access, configure it and run/manual-review the prepared evaluation dataset. Add adversarial retrieved-document cases and address observed failures.
 3. Use the prepared architecture walkthrough and script to record the demo; add the actual evaluation report and prepare the v1.0 release.
 
