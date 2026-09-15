@@ -1,4 +1,4 @@
-# Browsercontrole — 13–14 september 2026
+# Browsercontrole — 13–15 september 2026
 
 Gecontroleerd in Chrome met Northstar als beoordelaar, tegen de lokale demo op poort 5089. Geen modelaanroepen of echte berichten verstuurd.
 
@@ -36,4 +36,24 @@ Tijdens de hertest bleek een oude JavaScript-versie in de geopende pagina actief
 
 ## Grenzen
 
-Dit is een gerichte controle van de beoordelaarsroute, geen volledige toegankelijkheidsaudit of test van alle browsers. Operatorrechten, afwijzing, verlopen/gewijzigde versies, foutpaden en klantscheiding zijn door de bestaande softwaretests gedekt; die zijn niet allemaal opnieuw handmatig in deze browsersessie uitgevoerd. Lege klantomgevingen en netwerkmislukkingen zijn niet visueel nagebootst. Echte modelantwoorden blijven buiten deze controle.
+Dit is een gerichte controle van de beoordelaarsroute, geen volledige toegankelijkheidsaudit of test van alle browsers. Operatorrechten, afwijzing, verlopen/gewijzigde versies, foutpaden en klantscheiding zijn door de bestaande softwaretests gedekt; die zijn niet allemaal opnieuw handmatig in deze browsersessie uitgevoerd. Lege datasets en fouten zijn op 15 september aanvullend via een geïsoleerde testserver gecontroleerd, zoals hieronder beschreven. Echte modelantwoorden blijven buiten deze controle.
+
+
+## Lege schermen en fouten — 15 september
+
+De echte frontend is in Chrome geladen vanaf een tijdelijke server op uitsluitend `127.0.0.1:5091`. Die serveerde expliciete testresponses: lege lijsten, kopieën van fictieve operationele gegevens en ingestelde HTTP-fouten. De bestaande demo op 5089, haar toegangscodes, concepten en auditlog zijn niet gewijzigd. De tijdelijke testcode was alleen geldig voor deze testserver; er zijn geen providerverbindingen gebruikt. Dit test de browserpresentatie en herstelacties, niet nieuwe backendfoutscenario’s.
+
+| Controle | Resultaat |
+| --- | --- |
+| Ongeldige toegangscode | Nederlandse fout zichtbaar; daarna aanmelden met de testcode lukt. |
+| Lege voertuigen en planning | Nulstanden, lege voorraad, lege aankomsten en geen voertuigonderzoek zichtbaar. |
+| Lege voorstellen en monitoring | Uitleg zichtbaar; gemiddelde en percentiel tonen “Niet gemeten”. |
+| Leeg naar gevuld | Vernieuwen herstelt voertuigselectie en planningscijfers. |
+| Planning geeft HTTP 500 | Oude cijfers, tabellen en bronnen worden gewist; fout en vernieuwknop blijven beschikbaar. |
+| Planning herstelt | Nieuwe gegevens verschijnen en de foutmelding verdwijnt. |
+| Voorstellen geven HTTP 500 en herstellen | Fout zichtbaar; succesvol vernieuwen ruimt de melding op. |
+| Conceptaanmaak geeft HTTP 503 | Geen succesmelding of nieuw concept; de fout blijft na het ophalen van de lijst zichtbaar. |
+| Testserver werkelijk gestopt | Nederlandse verbindingsmelding zichtbaar; na herstart herstelt vernieuwen zonder opnieuw aanmelden. |
+| Eerste laden geeft HTTP 500 | Login toont een fout en opent geen halfgevulde werkruimte. |
+
+De lege mobiele werkruimte en de desktopfoutmeldingen zijn visueel bekeken. Twee kleine teksten zijn aangepast en hertest: bij lege voorraad geen uitnodiging een voertuig te kiezen, en bij een onbeschikbare conceptfunctie geen misleidende verwijzing naar modelconfiguratie. JavaScript-syntax en gewijzigde assetversies zijn gecontroleerd. De tijdelijke viewportinstelling is verwijderd en de testtab en testserver zijn gesloten.

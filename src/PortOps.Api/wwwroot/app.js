@@ -44,7 +44,9 @@ async function api(path, options = {}) {
       403: 'Voor deze actie is een beoordelaarscode nodig.',
       409: 'Dit voorstel is verlopen, gewijzigd of al afgehandeld. Vernieuw het overzicht en controleer opnieuw.',
       429: 'Er loopt al een onderzoek of je hebt te snel opnieuw gevraagd. Probeer het straks nog eens.',
-      503: 'Deze functie is momenteel niet beschikbaar. Controleer de modelstatus of probeer later opnieuw.',
+      503: path.startsWith('/api/agent/')
+        ? 'Deze functie is momenteel niet beschikbaar. Controleer de modelstatus of probeer later opnieuw.'
+        : 'Deze functie is tijdelijk niet beschikbaar. Probeer later opnieuw.',
       504: 'Het onderzoek duurde te lang. Er wordt geen gedeeltelijk antwoord getoond.'
     };
     throw new Error(messages[response.status] || 'De aanvraag is mislukt. Probeer opnieuw.');
@@ -386,7 +388,7 @@ async function loadPlanning() {
     }
     const warnings = $('#planning-warnings'); warnings.replaceChildren();
     for (const message of result.warnings) warnings.append(el('p', 'warning', message));
-    $('#planning-stock-note').textContent = `${result.inventoryCount} unieke voertuigen volgens de voorraadopname · ${result.openHolds} open blokkades. Gereed voor afhaling is geen bevestigde afhaalafspraak. Klik op een voertuig voor onderzoek.`;
+    $('#planning-stock-note').textContent = `${result.inventoryCount} unieke voertuigen volgens de voorraadopname · ${result.openHolds} open blokkades. Gereed voor afhaling is geen bevestigde afhaalafspraak. ${result.stock.length ? 'Klik op een voertuig voor onderzoek.' : 'Er is geen voertuig beschikbaar om te selecteren.'}`;
     const stock = planningTable(['Voertuig', 'Afhaling / laden', 'Blokkades en bronkwaliteit', 'Laaddeadline', 'Bronnen']);
     const deadlines = { elapsed: 'Verstreken', within_window: 'Binnen venster', outside_window: 'Buiten venster', not_set: 'Niet vastgelegd' };
     for (const row of result.stock) {
