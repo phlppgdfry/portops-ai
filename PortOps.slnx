@@ -3,6 +3,7 @@
     <Project Path="src/PortOps.Agent/PortOps.Agent.csproj" />
     <Project Path="src/PortOps.Api/PortOps.Api.csproj" />
     <Project Path="src/PortOps.Domain/PortOps.Domain.csproj" />
+    <Project Path="src/PortOps.Contracts/PortOps.Contracts.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/PortOps.Tests/PortOps.Tests.csproj" />

@@ -1,0 +1,37 @@
+name: Publish PortOps.Contracts
+on:
+  release:
+    types: [published]
+permissions:
+  contents: read
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'contracts-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Validate release version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION=$(dotnet msbuild src/PortOps.Contracts/PortOps.Contracts.csproj -getProperty:Version)
+          test "$RELEASE_TAG" = "contracts-v$VERSION"
+      - run: dotnet test PortOps.slnx --configuration Release --verbosity minimal
+      - run: dotnet pack src/PortOps.Contracts --configuration Release --output artifacts/packages
+      - name: Publish to GitHub Packages
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username "${{ github.actor }}" --password "$NUGET_AUTH_TOKEN" --store-password-in-clear-text
+          dotnet nuget push artifacts/packages/*.nupkg --source github --api-key "$NUGET_AUTH_TOKEN" --skip-duplicate
+      - name: Attach package to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" artifacts/packages/*.nupkg --clobber

@@ -106,3 +106,7 @@ See the progress document for the current milestone and its validation limits. P
 - [Architecture decisions](docs/architecture.md)
 
 All operational examples will use fictional organizations, vehicles, documents and events. This project is not affiliated with, commissioned by, or integrated with ICO or any terminal operator.
+
+## Reusable package
+
+[PortOps.Contracts](src/PortOps.Contracts/README.md) is the dependency-free .NET 8+ library of operational records consumed by this application. It includes bookings, vehicle observations, evidence, holds and readiness read models. [Package releases](https://github.com/phlppgdfry/portops-ai/releases) include a downloadable NuGet artifact; the authenticated GitHub Packages feed is `https://nuget.pkg.github.com/phlppgdfry/index.json`.

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>PortOps.Contracts</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Philippe Godfroy</Authors>
+    <Description>Dependency-free RoRo terminal data contracts for evidence, bookings, vehicle readiness and operational exceptions. Used by PortOps AI.</Description>
+    <PackageProjectUrl>https://github.com/phlppgdfry/portops-ai</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/phlppgdfry/portops-ai</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>logistics;roro;terminal;contracts;readiness</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
