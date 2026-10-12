@@ -1,0 +1,11 @@
+using PortOps.Domain;
+using System.Text.Json;
+var occurrence=DateTimeOffset.Parse("2026-10-12T08:20:00Z");
+var evidence=new Evidence("gate-source-1","synthetic-gate",occurrence.AddMinutes(2),"Arrival observed");
+var original=new ShipmentEventEnvelope("shipment-demo","customer-demo","gate-1",new("gate_in",occurrence,evidence), CorrelationId:"visit-1");
+var options=new JsonSerializerOptions(JsonSerializerDefaults.Web){WriteIndented=true};
+var json=JsonSerializer.Serialize(original,options);
+var restored=JsonSerializer.Deserialize<ShipmentEventEnvelope>(json,options);
+if(restored!=original || restored.SchemaVersion!=1 || restored.CorrelationId!="visit-1") throw new InvalidOperationException("Contract round-trip failed");
+Console.WriteLine(json);
+Console.WriteLine("PASS: independent NuGet consumer preserved the versioned event and evidence.");

@@ -1,0 +1,34 @@
+{
+  "id": "legacy-vehicle",
+  "customerId": "legacy-customer",
+  "bookingId": "legacy-booking",
+  "observations": [
+    {
+      "kind": 0,
+      "ready": false,
+      "evidence": {
+        "id": "legacy-evidence",
+        "source": "synthetic-v0.1",
+        "observedAt": "2026-10-12T08:00:00+02:00",
+        "detail": "Hold unresolved"
+      }
+    }
+  ],
+  "activeHolds": [
+    {
+      "id": "legacy-hold",
+      "reason": "Customs",
+      "owner": "operator",
+      "blocksPickup": true,
+      "blocksLoading": false,
+      "estimatedCompletion": null,
+      "evidence": {
+        "id": "legacy-evidence",
+        "source": "synthetic-v0.1",
+        "observedAt": "2026-10-12T08:00:00+02:00",
+        "detail": "Hold unresolved"
+      }
+    }
+  ],
+  "events": []
+}

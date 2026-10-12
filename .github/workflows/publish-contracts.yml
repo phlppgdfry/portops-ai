@@ -24,6 +24,13 @@ jobs:
           test "$RELEASE_TAG" = "contracts-v$VERSION"
       - run: dotnet test PortOps.slnx --configuration Release --verbosity minimal
       - run: dotnet pack src/PortOps.Contracts --configuration Release --output artifacts/packages
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Verify independent package consumer
+        run: |
+          dotnet restore examples/PortOps.Contracts.Consumer --source "$PWD/artifacts/packages" --source https://api.nuget.org/v3/index.json
+          dotnet run --project examples/PortOps.Contracts.Consumer --configuration Release --no-restore
       - name: Publish to GitHub Packages
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
