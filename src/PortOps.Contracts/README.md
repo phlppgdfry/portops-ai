@@ -59,3 +59,7 @@ Existing enum numbers are explicit and frozen by compatibility tests. A JSON fix
 [Independent executable consumer](../../examples/PortOps.Contracts.Consumer/README.md) references the packaged artifact. The publication workflow builds and executes it against the local feed before registry upload. The shipment tracking API is another consumer of the released package.
 
 For existing records, keep constructor signatures, property names, nullability and enum numbers stable. Additive new types can ship in minor preview releases. A breaking change requires an explicitly documented migration and a new version; never reinterpret existing enum values. The fixtures protect documented compatibility, not every conceivable downstream use.
+
+## Connected API consumer
+
+[Shipment Desk](https://github.com/phlppgdfry/shipment-tracking-platform/blob/master/docs/DEMO.md) references the released NuGet package and returns its `ShipmentEventEnvelope` from customer-scoped event endpoints. [The controller](https://github.com/phlppgdfry/shipment-tracking-platform/blob/master/src/WebAPI/Controllers/OperationsController.cs) demonstrates the mapping; the API owns authorization and persistence. The preview's type vocabulary distinguishes planned target times from actual occurrences. The library itself does not verify a source's truth or grant cargo-release permission.
