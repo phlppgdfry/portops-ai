@@ -2,6 +2,15 @@
 
 Dependency-free .NET 8+ data contracts extracted from the working PortOps AI application. Version 0.2.0 is a preview. These contracts describe fictional RoRo terminal scenarios; they do not authorize release of cargo.
 
+## Start here
+
+| You want to… | Open |
+| --- | --- |
+| Install without registry credentials | [Download PortOps.Contracts.0.2.0.nupkg](https://github.com/phlppgdfry/portops-ai/releases/download/contracts-v0.2.0/PortOps.Contracts.0.2.0.nupkg) and use a local feed |
+| Run a small standalone consumer | [Executable .NET 8 example](../../examples/PortOps.Contracts.Consumer/README.md) |
+| Understand the wire format | [JSON compatibility](#json-compatibility) and [field semantics](#field-semantics-and-compatibility) |
+| See the contracts in an API | [Connected Shipment Desk](https://github.com/phlppgdfry/shipment-tracking-platform/blob/master/docs/DEMO.md) |
+
 ## Install from GitHub Packages
 
 The feed is `https://nuget.pkg.github.com/phlppgdfry/index.json`. GitHub's NuGet registry requires authentication even for public packages. Use a personal access token (classic) with `read:packages`; keep it in your credential provider or local user configuration, never in a repository. In GitHub Actions, use `GITHUB_TOKEN` with package access.
@@ -31,6 +40,7 @@ var json = JsonSerializer.Serialize(arrival, new JsonSerializerOptions(JsonSeria
 ## Contract groups
 
 - Evidence and observations: `Evidence`, `StatusObservation`, `OperationalEvent`.
+- Versioned integration envelope: `ShipmentEventEnvelope` (schema version 1, optional correlation ID).
 - Operational references: `Vehicle`, `Booking`, `VesselCall`, `TerminalSnapshot`, `Hold`.
 - Read models: `ReadinessAssessment`, `VehicleInvestigation`, `AttentionItem`, `AttentionOverview`.
 - Enums: `ReadinessKind`, `ReadinessState`, `AttentionPriority`.
