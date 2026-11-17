@@ -1,0 +1,1930 @@
+{
+ "recordedFrom": "local run of src/PortOps.Api (demo profile, customer northstar, fixed scenario clock 2026-09-07 08:00 UTC)",
+ "attention": {
+  "4": {
+   "evaluatedAt": "2026-09-07T08:00:00+00:00",
+   "windowEnd": "2026-09-07T12:00:00+00:00",
+   "vehiclesInScope": 6,
+   "items": [
+    {
+     "bookingId": "BOOK-102",
+     "vehicleId": "DEMO-003",
+     "priority": "Critical",
+     "reason": "Loading deadline reached or passed; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T07:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-003p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h003",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Damage assessment unresolved; no completion estimate."
+      },
+      {
+       "id": "s-003l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b102",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 07:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-002",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-002p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h002",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Inspection hold remains open; completion is an estimate."
+      },
+      {
+       "id": "s-002l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-005",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-005p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Conflicting",
+      "explanation": "Current sources disagree. A responsible operator must reconcile the status.",
+      "evidence": [
+       {
+        "id": "s-005l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       },
+       {
+        "id": "s-005plan",
+        "source": "synthetic-planning",
+        "observedAt": "2026-09-07T06:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-005p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-005l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "s-005plan",
+       "source": "synthetic-planning",
+       "observedAt": "2026-09-07T06:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-104",
+     "vehicleId": "DEMO-006",
+     "priority": "Review",
+     "reason": "Readiness or source quality requires review; no imminent loading deadline is asserted.",
+     "loadingDeadline": "2026-09-09T08:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "evidence": [
+      {
+       "id": "s-006p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-006l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b104",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off in 48 hours."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-103",
+     "vehicleId": "DEMO-004",
+     "priority": "Review",
+     "reason": "Readiness or source quality requires review; no imminent loading deadline is asserted.",
+     "loadingDeadline": null,
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pickup release check pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-004p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h004",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup-only release check is still open."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-004l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-004p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h004",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup-only release check is still open."
+      },
+      {
+       "id": "s-004l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b103",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Import booking, no loading deadline configured."
+      }
+     ]
+    }
+   ]
+  },
+  "24": {
+   "evaluatedAt": "2026-09-07T08:00:00+00:00",
+   "windowEnd": "2026-09-08T08:00:00+00:00",
+   "vehiclesInScope": 6,
+   "items": [
+    {
+     "bookingId": "BOOK-102",
+     "vehicleId": "DEMO-003",
+     "priority": "Critical",
+     "reason": "Loading deadline reached or passed; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T07:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-003p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h003",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Damage assessment unresolved; no completion estimate."
+      },
+      {
+       "id": "s-003l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b102",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 07:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-002",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-002p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h002",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Inspection hold remains open; completion is an estimate."
+      },
+      {
+       "id": "s-002l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-005",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-005p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Conflicting",
+      "explanation": "Current sources disagree. A responsible operator must reconcile the status.",
+      "evidence": [
+       {
+        "id": "s-005l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       },
+       {
+        "id": "s-005plan",
+        "source": "synthetic-planning",
+        "observedAt": "2026-09-07T06:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-005p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-005l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "s-005plan",
+       "source": "synthetic-planning",
+       "observedAt": "2026-09-07T06:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-104",
+     "vehicleId": "DEMO-006",
+     "priority": "Review",
+     "reason": "Readiness or source quality requires review; no imminent loading deadline is asserted.",
+     "loadingDeadline": "2026-09-09T08:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "evidence": [
+      {
+       "id": "s-006p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-006l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b104",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off in 48 hours."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-103",
+     "vehicleId": "DEMO-004",
+     "priority": "Review",
+     "reason": "Readiness or source quality requires review; no imminent loading deadline is asserted.",
+     "loadingDeadline": null,
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pickup release check pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-004p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h004",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup-only release check is still open."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-004l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-004p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h004",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup-only release check is still open."
+      },
+      {
+       "id": "s-004l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b103",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Import booking, no loading deadline configured."
+      }
+     ]
+    }
+   ]
+  },
+  "72": {
+   "evaluatedAt": "2026-09-07T08:00:00+00:00",
+   "windowEnd": "2026-09-10T08:00:00+00:00",
+   "vehiclesInScope": 6,
+   "items": [
+    {
+     "bookingId": "BOOK-102",
+     "vehicleId": "DEMO-003",
+     "priority": "Critical",
+     "reason": "Loading deadline reached or passed; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T07:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-003l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-003p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h003",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Damage assessment unresolved; no completion estimate."
+      },
+      {
+       "id": "s-003l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b102",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 07:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-002",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-002l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       },
+       {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-002p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h002",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Inspection hold remains open; completion is an estimate."
+      },
+      {
+       "id": "s-002l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-101",
+     "vehicleId": "DEMO-005",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-07T12:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-005p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Conflicting",
+      "explanation": "Current sources disagree. A responsible operator must reconcile the status.",
+      "evidence": [
+       {
+        "id": "s-005l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       },
+       {
+        "id": "s-005plan",
+        "source": "synthetic-planning",
+        "observedAt": "2026-09-07T06:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-005p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-005l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "s-005plan",
+       "source": "synthetic-planning",
+       "observedAt": "2026-09-07T06:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-b101",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off at 12:00 UTC."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-104",
+     "vehicleId": "DEMO-006",
+     "priority": "High",
+     "reason": "Loading deadline falls within the selected window; loading readiness is unresolved.",
+     "loadingDeadline": "2026-09-09T08:00:00+00:00",
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Unknown",
+      "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+      "evidence": [
+       {
+        "id": "s-006l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": [
+       "Stale status observations were excluded from readiness decisions."
+      ]
+     },
+     "evidence": [
+      {
+       "id": "s-006p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      },
+      {
+       "id": "s-006l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b104",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Synthetic loading cut-off in 48 hours."
+      }
+     ]
+    },
+    {
+     "bookingId": "BOOK-103",
+     "vehicleId": "DEMO-004",
+     "priority": "Review",
+     "reason": "Readiness or source quality requires review; no imminent loading deadline is asserted.",
+     "loadingDeadline": null,
+     "pickup": {
+      "kind": "Pickup",
+      "state": "Blocked",
+      "explanation": "Unresolved hold(s): Pickup release check pending. Completion estimates do not release holds.",
+      "evidence": [
+       {
+        "id": "s-004p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       },
+       {
+        "id": "e-h004",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup-only release check is still open."
+       }
+      ],
+      "warnings": []
+     },
+     "loading": {
+      "kind": "Loading",
+      "state": "Ready",
+      "explanation": "Current explicit readiness evidence and no applicable active hold.",
+      "evidence": [
+       {
+        "id": "s-004l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      ],
+      "warnings": []
+     },
+     "evidence": [
+      {
+       "id": "s-004p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h004",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup-only release check is still open."
+      },
+      {
+       "id": "s-004l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "e-b103",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Import booking, no loading deadline configured."
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "vehicles": {
+  "DEMO-001": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-001",
+     "customerId": "northstar",
+     "bookingId": "BOOK-101",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": true,
+       "evidence": {
+        "id": "s-001p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": true,
+       "evidence": {
+        "id": "s-001l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      }
+     ],
+     "activeHolds": [],
+     "events": []
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Ready",
+     "explanation": "Current explicit readiness evidence and no applicable active hold.",
+     "evidence": [
+      {
+       "id": "s-001p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      }
+     ],
+     "warnings": []
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Ready",
+     "explanation": "Current explicit readiness evidence and no applicable active hold.",
+     "evidence": [
+      {
+       "id": "s-001l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      }
+     ],
+     "warnings": []
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-002": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-002",
+     "customerId": "northstar",
+     "bookingId": "BOOK-101",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": false,
+       "evidence": {
+        "id": "s-002p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": false,
+       "evidence": {
+        "id": "s-002l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      }
+     ],
+     "activeHolds": [
+      {
+       "id": "h-002",
+       "reason": "Pre-delivery inspection incomplete",
+       "owner": "vehicle-processing",
+       "blocksPickup": true,
+       "blocksLoading": true,
+       "estimatedCompletion": "2026-09-07T10:00:00+00:00",
+       "evidence": {
+        "id": "e-h002",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Inspection hold remains open; completion is an estimate."
+       }
+      }
+     ],
+     "events": []
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Blocked",
+     "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+     "evidence": [
+      {
+       "id": "s-002p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h002",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Inspection hold remains open; completion is an estimate."
+      }
+     ],
+     "warnings": []
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Blocked",
+     "explanation": "Unresolved hold(s): Pre-delivery inspection incomplete. Completion estimates do not release holds.",
+     "evidence": [
+      {
+       "id": "s-002l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-h002",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Inspection hold remains open; completion is an estimate."
+      }
+     ],
+     "warnings": []
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-hold",
+     "version": 1,
+     "title": "Openstaande behandeling of schade",
+     "text": "Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is.",
+     "customerId": null,
+     "keywords": [
+      "hold",
+      "blokkade",
+      "geblokkeerd",
+      "schade",
+      "damage",
+      "behandeling",
+      "treatment",
+      "inspection"
+     ],
+     "evidence": {
+      "id": "proc-hold-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Openstaande behandeling of schade. Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-003": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-003",
+     "customerId": "northstar",
+     "bookingId": "BOOK-102",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": false,
+       "evidence": {
+        "id": "s-003p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": false,
+       "evidence": {
+        "id": "s-003l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      }
+     ],
+     "activeHolds": [
+      {
+       "id": "h-003",
+       "reason": "Damage assessment pending",
+       "owner": "damage-team",
+       "blocksPickup": true,
+       "blocksLoading": true,
+       "estimatedCompletion": null,
+       "evidence": {
+        "id": "e-h003",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Damage assessment unresolved; no completion estimate."
+       }
+      }
+     ],
+     "events": []
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Blocked",
+     "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+     "evidence": [
+      {
+       "id": "s-003p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h003",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Damage assessment unresolved; no completion estimate."
+      }
+     ],
+     "warnings": []
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Blocked",
+     "explanation": "Unresolved hold(s): Damage assessment pending. Completion estimates do not release holds.",
+     "evidence": [
+      {
+       "id": "s-003l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      },
+      {
+       "id": "e-h003",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Damage assessment unresolved; no completion estimate."
+      }
+     ],
+     "warnings": []
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-hold",
+     "version": 1,
+     "title": "Openstaande behandeling of schade",
+     "text": "Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is.",
+     "customerId": null,
+     "keywords": [
+      "hold",
+      "blokkade",
+      "geblokkeerd",
+      "schade",
+      "damage",
+      "behandeling",
+      "treatment",
+      "inspection"
+     ],
+     "evidence": {
+      "id": "proc-hold-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Openstaande behandeling of schade. Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-004": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-004",
+     "customerId": "northstar",
+     "bookingId": "BOOK-103",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": false,
+       "evidence": {
+        "id": "s-004p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as False."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": true,
+       "evidence": {
+        "id": "s-004l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      }
+     ],
+     "activeHolds": [
+      {
+       "id": "h-004",
+       "reason": "Pickup release check pending",
+       "owner": "release-desk",
+       "blocksPickup": true,
+       "blocksLoading": false,
+       "estimatedCompletion": null,
+       "evidence": {
+        "id": "e-h004",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup-only release check is still open."
+       }
+      }
+     ],
+     "events": [
+      {
+       "type": "Discharged",
+       "occurredAt": "2026-09-07T06:00:00+00:00",
+       "evidence": {
+        "id": "e-004discharge",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Vehicle discharge completed."
+       }
+      }
+     ]
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Blocked",
+     "explanation": "Unresolved hold(s): Pickup release check pending. Completion estimates do not release holds.",
+     "evidence": [
+      {
+       "id": "s-004p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as False."
+      },
+      {
+       "id": "e-h004",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup-only release check is still open."
+      }
+     ],
+     "warnings": []
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Ready",
+     "explanation": "Current explicit readiness evidence and no applicable active hold.",
+     "evidence": [
+      {
+       "id": "s-004l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      }
+     ],
+     "warnings": []
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-hold",
+     "version": 1,
+     "title": "Openstaande behandeling of schade",
+     "text": "Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is.",
+     "customerId": null,
+     "keywords": [
+      "hold",
+      "blokkade",
+      "geblokkeerd",
+      "schade",
+      "damage",
+      "behandeling",
+      "treatment",
+      "inspection"
+     ],
+     "evidence": {
+      "id": "proc-hold-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Openstaande behandeling of schade. Controleer de geregistreerde blokkade, verantwoordelijke en laatste bronupdate. Vraag de verantwoordelijke om opvolging. Een geschatte afronding heft een blokkade niet op. Vermeld geen eindtijd wanneer die niet geregistreerd is."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-005": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-005",
+     "customerId": "northstar",
+     "bookingId": "BOOK-101",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": true,
+       "evidence": {
+        "id": "s-005p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": true,
+       "evidence": {
+        "id": "s-005l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-07T07:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": false,
+       "evidence": {
+        "id": "s-005plan",
+        "source": "synthetic-planning",
+        "observedAt": "2026-09-07T06:00:00+00:00",
+        "detail": "Loading readiness recorded as False."
+       }
+      }
+     ],
+     "activeHolds": [],
+     "events": []
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Ready",
+     "explanation": "Current explicit readiness evidence and no applicable active hold.",
+     "evidence": [
+      {
+       "id": "s-005p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      }
+     ],
+     "warnings": []
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Conflicting",
+     "explanation": "Current sources disagree. A responsible operator must reconcile the status.",
+     "evidence": [
+      {
+       "id": "s-005l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-07T07:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      },
+      {
+       "id": "s-005plan",
+       "source": "synthetic-planning",
+       "observedAt": "2026-09-07T06:00:00+00:00",
+       "detail": "Loading readiness recorded as False."
+      }
+     ],
+     "warnings": []
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-quality",
+     "version": 1,
+     "title": "Tegenstrijdige of verouderde bronnen",
+     "text": "Toon de conflicterende bronnen en tijdstippen. Kies niet zelf welke bron correct is. Vraag de verantwoordelijke operator om reconciliatie of een actuele status. Bevestig geen afhaalafspraak zolang vrijgave niet voldoende is onderbouwd.",
+     "customerId": null,
+     "keywords": [
+      "conflict",
+      "conflicting",
+      "tegenstrijdig",
+      "stale",
+      "verouderd",
+      "onbekend",
+      "unknown",
+      "bronnen"
+     ],
+     "evidence": {
+      "id": "proc-quality-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Tegenstrijdige of verouderde bronnen. Toon de conflicterende bronnen en tijdstippen. Kies niet zelf welke bron correct is. Vraag de verantwoordelijke operator om reconciliatie of een actuele status. Bevestig geen afhaalafspraak zolang vrijgave niet voldoende is onderbouwd."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-006": {
+   "status": 200,
+   "body": {
+    "vehicle": {
+     "id": "DEMO-006",
+     "customerId": "northstar",
+     "bookingId": "BOOK-104",
+     "observations": [
+      {
+       "kind": "Pickup",
+       "ready": true,
+       "evidence": {
+        "id": "s-006p",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Pickup readiness recorded as True."
+       }
+      },
+      {
+       "kind": "Loading",
+       "ready": true,
+       "evidence": {
+        "id": "s-006l",
+        "source": "synthetic-tos",
+        "observedAt": "2026-09-06T20:00:00+00:00",
+        "detail": "Loading readiness recorded as True."
+       }
+      }
+     ],
+     "activeHolds": [],
+     "events": []
+    },
+    "pickup": {
+     "kind": "Pickup",
+     "state": "Unknown",
+     "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+     "evidence": [
+      {
+       "id": "s-006p",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Pickup readiness recorded as True."
+      }
+     ],
+     "warnings": [
+      "Stale status observations were excluded from readiness decisions."
+     ]
+    },
+    "loading": {
+     "kind": "Loading",
+     "state": "Unknown",
+     "explanation": "No current explicit readiness observation. Arrival or discharge does not establish release.",
+     "evidence": [
+      {
+       "id": "s-006l",
+       "source": "synthetic-tos",
+       "observedAt": "2026-09-06T20:00:00+00:00",
+       "detail": "Loading readiness recorded as True."
+      }
+     ],
+     "warnings": [
+      "Stale status observations were excluded from readiness decisions."
+     ]
+    },
+    "evaluatedAt": "2026-09-07T08:00:00+00:00"
+   },
+   "procedures": [
+    {
+     "id": "proc-deadline",
+     "version": 1,
+     "title": "Opvolging van een laaddeadline",
+     "text": "Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage.",
+     "customerId": null,
+     "keywords": [
+      "laden",
+      "loading",
+      "deadline",
+      "planning",
+      "afvaart",
+      "prioriteit"
+     ],
+     "evidence": {
+      "id": "proc-deadline-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Opvolging van een laaddeadline. Meld een naderende of verstreken laaddeadline wanneer laden nog niet gereed is. Vermeld openstaande beperkingen en leg opvolging voor aan de planner. Een verstreken deadline bewijst niet dat het schip is gemist; bereken geen kanspercentage."
+     }
+    },
+    {
+     "id": "proc-quality",
+     "version": 1,
+     "title": "Tegenstrijdige of verouderde bronnen",
+     "text": "Toon de conflicterende bronnen en tijdstippen. Kies niet zelf welke bron correct is. Vraag de verantwoordelijke operator om reconciliatie of een actuele status. Bevestig geen afhaalafspraak zolang vrijgave niet voldoende is onderbouwd.",
+     "customerId": null,
+     "keywords": [
+      "conflict",
+      "conflicting",
+      "tegenstrijdig",
+      "stale",
+      "verouderd",
+      "onbekend",
+      "unknown",
+      "bronnen"
+     ],
+     "evidence": {
+      "id": "proc-quality-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Tegenstrijdige of verouderde bronnen. Toon de conflicterende bronnen en tijdstippen. Kies niet zelf welke bron correct is. Vraag de verantwoordelijke operator om reconciliatie of een actuele status. Bevestig geen afhaalafspraak zolang vrijgave niet voldoende is onderbouwd."
+     }
+    },
+    {
+     "id": "proc-rfp",
+     "version": 1,
+     "title": "Afhaling en vrijgave",
+     "text": "Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is.",
+     "customerId": null,
+     "keywords": [
+      "rfp",
+      "pickup",
+      "afhaling",
+      "vrijgave",
+      "gelost",
+      "discharge",
+      "release"
+     ],
+     "evidence": {
+      "id": "proc-rfp-v1",
+      "source": "synthetic-procedure-v1",
+      "observedAt": "2026-09-07T07:00:00+00:00",
+      "detail": "Fictieve procedure \u2014 Afhaling en vrijgave. Bevestig afhaling alleen op basis van actuele expliciete pickup-vrijgave zonder actieve pickup-blokkade. Aankomst, lossing en een afgeronde behandeling betekenen op zichzelf geen vrijgave. Ontbreekt een vrijgavetijd, vermeld dan dat deze onbekend is."
+     }
+    }
+   ]
+  },
+  "DEMO-007": {
+   "status": 404,
+   "body": "",
+   "procedures": null
+  }
+ },
+ "demo": {
+  "name": "PortOps AI \u2014 Logistics Operations Agent",
+  "mode": "synthetic-demo",
+  "customerId": "northstar",
+  "canApprove": false,
+  "scenarioTime": "2026-09-07T08:00:00+00:00",
+  "evaluatedAt": "2026-09-07T08:00:00+00:00",
+  "displayTimeZone": "Europe/Brussels",
+  "maximumObservationAgeHours": 6,
+  "note": "Clock is fixed for repeatable scenarios. No live TOS is connected. Model configuration is reported by /api/agent/status."
+ }
+}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PortOps AI — an operations agent for a RoRo terminal that shows its sources</title>
+<meta name="description" content="A .NET 10 operations API and Dutch operations desk for a fictional RoRo terminal: deterministic readiness rules, a tool-calling agent behind an interface, versioned procedures and human approval with audit records.">
+<link rel="canonical" href="https://phlppgdfry.github.io/portops-ai/">
+<meta property="og:type" content="website"><meta property="og:title" content="PortOps AI — an operations agent for a RoRo terminal that shows its sources"><meta property="og:description" content="A .NET 10 operations API and Dutch operations desk for a fictional RoRo terminal: deterministic readiness rules, a tool-calling agent behind an interface, versioned procedures and human approval with audit records.">
+<meta property="og:url" content="https://phlppgdfry.github.io/portops-ai/"><meta property="og:image" content="https://phlppgdfry.github.io/portops-ai/og.jpg"><meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a0d12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f97362'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/showcase.css">
+<style>:root{--brand:#f97362;--accent-ink:#1a0603}
+.po-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:20px}
+.po-grid>*{min-width:0}
+@media (max-width:900px){.po-grid{grid-template-columns:1fr}}
+.po-list{display:grid;gap:6px}
+.po-list button{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;text-align:left;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--fg);cursor:pointer;font:inherit}
+.po-list button .pill{justify-self:end}
+.po-list button small{grid-column:1/-1;color:var(--muted);font-size:13px;line-height:1.35}
+.po-list button[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+.po-other{margin-top:10px;width:100%;background:none;border:1px dashed var(--line2);border-radius:10px;padding:10px;color:var(--muted);cursor:pointer;font:inherit;font-size:14px}
+.po-other:hover{color:var(--fg);border-color:var(--accent)}
+.po-detail{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.po-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.po-h h3{margin:0;font-size:20px}
+.po-reason{font-weight:600;margin:10px 0}
+.po-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:620px){.po-two{grid-template-columns:1fr}}
+.po-ready{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px}
+.po-ready p{margin:6px 0;color:var(--muted)}
+.po-rh{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.po-warn{color:var(--warn)!important}
+.po-ev{list-style:none;margin:8px 0 0;padding:0;font-size:13px}
+.po-ev li{padding:6px 0;border-top:1px solid var(--line)}
+.po-ev code{color:var(--accent);font-size:12px}
+.po-proc{margin-top:12px;font-size:14px}.po-proc summary{cursor:pointer;color:var(--muted)}.po-proc p{color:var(--muted)}
+.po-gate{margin-top:12px;border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:10px;padding:12px;font-size:14px}
+.po-gate ol{margin:6px 0 0;padding-left:18px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <a class="brand" href="#"><i class="dot"></i><span>PortOps AI</span></a>
+  <nav><a class="" href="#demo">Try it</a><a class="" href="#how">How it works</a><a class="hide-sm" href="#screens">Screens</a><a class="hide-sm" href="#run">Run it</a><a href="https://github.com/phlppgdfry/portops-ai" aria-label="GitHub repository">GitHub</a><button class="theme" type="button" aria-label="Toggle light or dark theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button></nav>
+</div></div>
+<main>
+<header class="hero"><div class="wrap grid">
+  <div>
+    <div class="kicker"><span>.NET 10 · tool-calling agent · logistics</span><span class="chip status">Prototype</span></div>
+    <h1>Which vehicles need attention today, <em>and why?</em></h1>
+    <p class="lede">PortOps answers the dispatcher's daily question for a fictional RoRo terminal. Deterministic rules decide readiness from timestamped source records; an agent can explain them with six scoped tools; and nothing is sent until a separate reviewer approves the exact draft.</p>
+    <div class="ctas"><a class="btn primary" href="#demo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Explore the attention list</a><a class="btn" href="https://github.com/phlppgdfry/portops-ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg> Source on GitHub</a></div>
+    <div class="stack"><span class="chip">.NET 10</span><span class="chip">ASP.NET Core</span><span class="chip">Tool-calling agent</span><span class="chip">Azure OpenAI (pluggable)</span><span class="chip">xUnit · 132 tests</span><span class="chip">PortOps.Contracts NuGet</span></div>
+  </div>
+  <div class="hero-visual"><div class="frame"><div class="bar"><i></i><i></i><i></i><b>localhost:5088 · PortOps operations desk</b></div><img src="img/portops-ai-shots-login-overview.webp" alt="PortOps AI" width="1600" height="1000"></div><div class="caption">The real Dutch operations desk, running locally on the fixed scenario clock of 7 September 2026, 10:00 Brussels.</div></div>
+</div></header>
+<section id="why"><div class="wrap">
+  <p class="eyebrow">Why it exists</p><h2>"Ready for pickup" is a claim. It needs a source and a timestamp.</h2>
+  <div class="problem">
+    <div class="card before"><div class="label">Without it</div><p>Terminal status lives in several systems that disagree. A completion estimate gets read as a release, a stale observation as current, and an AI assistant that answers fluently can hide all of that, or send a customer message nobody checked.</p></div>
+    <div class="card after"><div class="label">With it</div><p>Readiness is computed by explicit rules: holds block, estimates never release, stale or conflicting sources are flagged for a person. The agent can only call scoped tools and must cite source IDs. Drafted messages wait for a separate reviewer and are delivered once, to a simulator, with an audit trail.</p></div>
+  </div>
+</div></section>
+<section id="demo"><div class="wrap">
+  <p class="eyebrow">Try it · runs in your browser</p><h2>Explore the attention list</h2>
+  <p class="sub">These are responses recorded from a local run of the real API for customer Northstar Motors, at the fixed scenario clock. Click a vehicle to see the rule outcome per readiness type, the evidence behind it, and the matched procedures. Then try a vehicle that belongs to another customer.</p>
+  <div class="demo"><div class="po-grid">
+  <div>
+    <div class="small dim" style="margin-bottom:8px">Attention list · Northstar Motors · <span class="mono">GET /api/operations/attention</span></div>
+    <div id="po-list" class="po-list"></div>
+    <button type="button" class="po-other" id="po-other">Try another customer's vehicle: DEMO-007</button>
+  </div>
+  <div id="po-detail" class="po-detail" tabindex="-1"></div>
+</div>
+</div>
+  <p class="note">Recorded API output, not a live connection: the API needs a demo token and runs locally. Procedures are fictional and in Dutch, like the operations desk.</p>
+</div></section>
+<section id="how"><div class="wrap">
+  <p class="eyebrow">How it works</p><h2>Rules decide, the agent explains, a person approves</h2>
+  
+  <div class="cards"><div class="card"><div class="ic">01</div><h3>Deterministic readiness</h3><p>Pickup and loading readiness from source records: open holds block, completion estimates never release, stale and conflicting observations go to review. No invented delay probabilities.</p></div><div class="card"><div class="ic">02</div><h3>Six scoped agent tools</h3><p>Attention, vehicle, vessel call, planning, procedure search and notification draft. A bounded model loop validates that answers cite retrieved sources.</p></div><div class="card"><div class="ic">03</div><h3>Human approval, exactly once</h3><p>A separate reviewer approves a specific version and content hash. Delivery is simulated, idempotent and written to an audit log; expired or changed drafts need a new version.</p></div><div class="card"><div class="ic">04</div><h3>Customer isolation and monitoring</h3><p>Customer scope comes from server-side claims. A reviewer-only panel shows per-request traces, durations and model usage, and exports them as JSON.</p></div></div>
+  <h3 style="margin:34px 0 14px">The flow, step by step</h3><div class="flow" role="list"><div class="node"><div class="n">01</div><b>Source records</b><small>synthetic TOS, planning and vessel calls, each timestamped</small></div><div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="node hl"><div class="n">02</div><b>Readiness rules</b><small>holds, deadlines, stale and conflicting evidence</small></div><div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="node"><div class="n">03</div><b>Attention list</b><small>Critical, High or Review, with the reason</small></div><div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="node"><div class="n">04</div><b>Agent or dispatcher</b><small>investigates with scoped tools and procedures</small></div><div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div><div class="node"><div class="n">05</div><b>Draft → reviewer</b><small>exact-version approval, one simulated delivery, audit</small></div></div>
+</div></section>
+<section id="screens"><div class="wrap">
+  <p class="eyebrow">Screens</p><h2>What it looks like</h2>
+  <p class="sub">Captured with Playwright against a local run: an operator token drafts the message, a separate reviewer token approves it.</p>
+  <div class="gallery"><figure data-zoom="Vehicle investigation — DEMO-003: blocked for pickup and loading, with each source record and its timestamp."><div class="frame"><img src="img/portops-ai-shots-vehicle.webp" alt="Vehicle investigation" width="1220" height="1348" loading="lazy" decoding="async"></div><figcaption><b>Vehicle investigation</b> DEMO-003: blocked for pickup and loading, with each source record and its timestamp.</figcaption></figure><figure data-zoom="Reviewer check — The reviewer confirms they checked this exact version before approval is possible."><div class="frame"><img src="img/portops-ai-shots-review.webp" alt="Reviewer check" width="1600" height="1333" loading="lazy" decoding="async"></div><figcaption><b>Reviewer check</b> The reviewer confirms they checked this exact version before approval is possible.</figcaption></figure><figure data-zoom="Approved and recorded — One simulated delivery with an audit log: drafted, approved, sent to the simulator. No e-mail leaves the machine."><div class="frame"><img src="img/portops-ai-shots-approved.webp" alt="Approved and recorded" width="1600" height="548" loading="lazy" decoding="async"></div><figcaption><b>Approved and recorded</b> One simulated delivery with an audit log: drafted, approved, sent to the simulator. No e-mail leaves the machine.</figcaption></figure><figure data-zoom="Reviewer monitoring — Per-request spans for the approval call, customer-scoped and exportable."><div class="frame"><img src="img/portops-ai-shots-monitoring-crop.webp" alt="Reviewer monitoring" width="1600" height="880" loading="lazy" decoding="async"></div><figcaption><b>Reviewer monitoring</b> Per-request spans for the approval call, customer-scoped and exportable.</figcaption></figure></div>
+</div></section>
+<section id="evidence"><div class="wrap">
+  <p class="eyebrow">Evidence</p><h2>What is real, and what is not</h2>
+  
+  <div class="metrics"><div class="metric"><div class="v">132</div><div class="l">automated tests</div><div class="s">domain, HTTP, agent, contract and monitoring tests, all passing</div></div><div class="metric"><div class="v">6</div><div class="l">agent tools</div><div class="s">each scoped to the signed-in customer</div></div><div class="metric"><div class="v">0</div><div class="l">real messages sent</div><div class="s">delivery goes to a simulator with an audit record</div></div></div>
+  <div class="honest" style="margin-top:18px">
+      <div class="card real"><h3><span class="pill ok">REAL</span> Built and verified</h3><ul><li>.NET 10 API, readiness rules, planning view and Dutch operations desk, run locally for these screenshots</li><li>Tool-calling agent loop with scripted models in tests and source validation</li><li>Separate reviewer identity, exact-version approval, expiry and idempotent simulated delivery</li><li>PortOps.Contracts released as a NuGet package and consumed by Shipment Desk</li></ul></div>
+      <div class="card sim"><h3><span class="pill warn">SIMULATED</span> Mocked or not built yet</h3><ul><li>All terminal data, customers, vehicles and procedures are fictional</li><li>No real-model run yet: the provider endpoint is not configured, so chat stays disabled in the demo</li><li>In-memory data and local JSON proposal storage; PostgreSQL and production identity are planned</li><li>Not affiliated with or connected to any terminal operator or TOS</li></ul></div></div>
+</div></section>
+<section id="run"><div class="wrap two">
+  <div><p class="eyebrow">Run it yourself</p><h2>Run it locally</h2>
+  <p class="sub">Requires the .NET SDK from <code>global.json</code>. No database, model account or cloud subscription.</p>
+  <div class="code"><button class="copy" type="button">Copy</button><pre><code>git clone https://github.com/phlppgdfry/portops-ai
+cd portops-ai
+dotnet test PortOps.slnx
+
+<span class="c"># generate local demo tokens: operator and a separate reviewer</span>
+export DemoAuth__Keys__northstar=&quot;$(openssl rand -hex 24)&quot;
+export DemoAuth__ReviewerKeys__northstar=&quot;$(openssl rand -hex 24)&quot;
+dotnet run --project src/PortOps.Api --launch-profile demo
+<span class="c"># open http://localhost:5088 and sign in with one of the tokens</span></code></pre></div></div>
+  <div><p class="eyebrow">Go deeper</p><h2>Read the source</h2>
+  <div class="links"><a href="https://github.com/phlppgdfry/portops-ai"><span>Repository</span><span>github</span></a><a href="https://github.com/phlppgdfry/portops-ai/blob/HEAD/docs/demo-walkthrough.md"><span>Five-minute demo and review flow</span><span>docs</span></a><a href="https://github.com/phlppgdfry/portops-ai/blob/HEAD/docs/api-and-rules.md"><span>API and demo policy</span><span>rules</span></a><a href="https://github.com/phlppgdfry/portops-ai/blob/HEAD/docs/architecture.md"><span>Architecture decisions</span><span>docs</span></a><a href="https://github.com/phlppgdfry/portops-ai/blob/HEAD/docs/agent-setup.md"><span>Agent setup and validation limits</span><span>docs</span></a><a href="https://github.com/phlppgdfry/portops-ai/blob/HEAD/docs/portfolio-uitleg.md"><span>Portfolio explanation (Dutch)</span><span>nl</span></a></div></div>
+</div></section></main>
+<footer><div class="wrap">
+  <span>PortOps AI · A portfolio project by Philippe Godfroy</span>
+  <span><a href="https://www.philippegodfroy.com/work">More projects</a> · <a href="https://github.com/phlppgdfry/portops-ai">Source</a></span>
+</div></footer>
+<script src="assets/showcase.js"></script>
+<script src="assets/demo.js" type="module"></script>
+</body></html>

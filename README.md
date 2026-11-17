@@ -1,5 +1,11 @@
 # PortOps AI — Logistics Operations Agent
 
+<!-- showcase:start -->
+> **[▶ Live showcase](https://phlppgdfry.github.io/portops-ai/)** — explore the attention list recorded from the real API, see the draft-to-approval flow and the reviewer monitoring in screenshots of the running app.
+
+[![Live showcase: portops-ai](site/demo.png)](https://phlppgdfry.github.io/portops-ai/)
+<!-- showcase:end -->
+
 An independent portfolio project for investigating RoRo terminal operations, explaining vehicle and booking exceptions with evidence, and proposing actions for human approval.
 
 **Status: .NET 10 operational API, tool-calling agent, versioned procedure retrieval, durable reviewable drafts and Dutch operations interface implemented. Automated tests use scripted models; a real-model smoke test is pending provider configuration. Human approval and simulated delivery work locally; real TOS integration, production identity, database storage and cloud deployment remain planned.**
